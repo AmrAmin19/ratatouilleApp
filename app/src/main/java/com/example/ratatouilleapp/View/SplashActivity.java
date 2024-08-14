@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity implements IsplashView {
 
     @Override
     public void navigateToMainActivity() {
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        Intent intent = new Intent(SplashActivity.this, AuthActivity.class);
         startActivity(intent);
         finish();
     }
