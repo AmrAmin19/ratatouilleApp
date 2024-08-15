@@ -45,5 +45,9 @@ dependencies {
     implementation ("com.airbnb.android:lottie:6.0.0")
     implementation ("io.reactivex.rxjava3:rxjava:3.1.6")
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.1")
+    implementation ("com.google.android.material:material:1.9.0")
+    implementation ("androidx.navigation:navigation-fragment:2.5.3")
+    implementation ("androidx.navigation:navigation-ui:2.5.3")
+
 
 }

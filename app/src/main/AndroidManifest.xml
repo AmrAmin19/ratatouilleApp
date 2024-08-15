@@ -13,7 +13,7 @@
         android:theme="@style/Theme.RatatouilleApp"
         tools:targetApi="31">
         <activity
-            android:name=".View.SplashActivity"
+            android:name=".View.Splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.MainActivity"/>
-        <activity android:name=".View.AuthActivity"/>
+        <activity android:name=".View.Authentication.AuthActivity"/>
     </application>
 
 </manifest>

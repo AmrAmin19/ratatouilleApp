@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View;
+package com.example.ratatouilleapp.View.Splash;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.ratatouilleapp.Presenter.SplashPresenter;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Authentication.AuthActivity;
 
 public class SplashActivity extends AppCompatActivity implements IsplashView {
 

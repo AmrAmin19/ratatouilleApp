@@ -44,13 +44,13 @@ public class AuthPresenterImpl {
             @Override
             public void onSuccess() {
                 view.hideLoading();
-                view.onSignUpSuccess();
+               // view.onSignUpSuccess();
             }
 
             @Override
             public void onFailure(Exception e) {
                 view.hideLoading();
-                view.onSignUpFailure(e.getMessage());
+               // view.onSignUpFailure(e.getMessage());
             }
         });
 

@@ -1,6 +1,6 @@
 package com.example.ratatouilleapp.Presenter;
 
-import com.example.ratatouilleapp.View.IsplashView;
+import com.example.ratatouilleapp.View.Splash.IsplashView;
 
 import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.core.Observable;
