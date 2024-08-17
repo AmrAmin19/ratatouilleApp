@@ -1,6 +1,9 @@
 package com.example.ratatouilleapp.View.Authentication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.LoginFragmentPresenter;
 import com.example.ratatouilleapp.Presenter.SignUpFragmentPresenter;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.MainActivity;
 
 public class LogInFragment extends Fragment implements Ilogin {
 
@@ -64,6 +68,7 @@ public class LogInFragment extends Fragment implements Ilogin {
             presenter.signIn(emailS, passwordS);
             email.setText("");
             password.setText("");
+
         });
 
 
@@ -84,6 +89,16 @@ public class LogInFragment extends Fragment implements Ilogin {
 
     @Override
     public void onSignInSuccess() {
+
+        //Shared pref : note try to make in repo
+        SharedPreferences sharedPreferences = ((this.getContext()).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isSignedIn", true);
+        editor.apply();
+
+        Intent intent = new Intent(this.getContext(), MainActivity.class);
+        startActivity(intent);
+        this.getActivity().finish();
 
         Toast.makeText(this.getContext(), "Sign-In successful!", Toast.LENGTH_SHORT).show();
     }

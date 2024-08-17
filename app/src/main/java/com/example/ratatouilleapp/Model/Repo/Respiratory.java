@@ -1,6 +1,7 @@
 package com.example.ratatouilleapp.Model.Repo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
@@ -28,7 +29,15 @@ public class Respiratory implements Irepo{
 
     @Override
     public void signIn(String email, String password, IfireBaseAuth.AuthCallback callback) {
+
         ifireBaseAuth.signIn(email,password,callback);
+
+//        SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean("isSignedIn", true);
+//        editor.apply();
+
+
     }
 
     @Override
@@ -41,5 +50,11 @@ public class Respiratory implements Irepo{
     public void signOut() {
 
         ifireBaseAuth.signOut();
+
+        SharedPreferences sharedPreferences = (context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isSignedIn", false);
+        editor.apply();
+
     }
 }

@@ -1,5 +1,8 @@
 package com.example.ratatouilleapp.Presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.View.Authentication.Ilogin;
@@ -23,6 +26,7 @@ public class LoginFragmentPresenter {
             public void onSuccess() {
                 view.hideLoading();
                 view.onSignInSuccess();
+
             }
 
             @Override
