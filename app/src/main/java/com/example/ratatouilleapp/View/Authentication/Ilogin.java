@@ -1,10 +1,8 @@
-package com.example.ratatouilleapp.View;
+package com.example.ratatouilleapp.View.Authentication;
 
-public interface AuthView {
+public interface Ilogin {
     void showLoading();
     void hideLoading();
     void onSignInSuccess();
     void onSignInFailure(String error);
-
-    void onSignOut();
 }

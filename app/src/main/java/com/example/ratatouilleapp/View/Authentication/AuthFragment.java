@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +18,11 @@ import com.example.ratatouilleapp.R;
 
 public class AuthFragment extends Fragment {
 
-    TextView authText;
+    //TextView authText;
+    ImageView faceBtn;
+    ImageView googleBtn;
+    Button signUpNtn;
+    TextView login;
 
     public AuthFragment() {
         // Required empty public constructor
@@ -44,11 +50,24 @@ public class AuthFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        authText=view.findViewById(R.id.authText);
-        authText.setOnClickListener(new View.OnClickListener() {
+        faceBtn=view.findViewById(R.id.facebookImage);
+        googleBtn=view.findViewById(R.id.googleImage);
+        signUpNtn=view.findViewById(R.id.button);
+        login=view.findViewById(R.id.textView2);
+
+
+
+        signUpNtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_authFragment_to_signUpFragment);
+            }
+        });
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_authFragment_to_logInFragment);
             }
         });
 

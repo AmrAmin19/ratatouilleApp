@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class SignUpFragment extends Fragment implements IsignUp {
     EditText confirmPas;
     Button signUpBtn;
     SignUpFragmentPresenter presenter;
+    private ProgressBar progressBar;
 
 
     public SignUpFragment() {
@@ -55,11 +57,25 @@ public class SignUpFragment extends Fragment implements IsignUp {
         password=view.findViewById(R.id.password);
         confirmPas=view.findViewById(R.id.confirm_password);
         signUpBtn=view.findViewById(R.id.sign_in_button);
+        progressBar = view.findViewById(R.id.progressBar);
 
         signUpBtn.setOnClickListener(v -> {
+
             String emailS = email.getText().toString();
             String paswordS = password.getText().toString();
-            presenter.signUp(emailS, paswordS);
+            String confirmPasS=confirmPas.getText().toString();
+            if (confirmPasS.equals(paswordS)) {
+                presenter.signUp(emailS, paswordS);
+                email.setText("");
+                password.setText("");
+                confirmPas.setText("");
+            }
+            else
+            {
+                Toast.makeText(this.getContext(), "password does not match !", Toast.LENGTH_SHORT).show();
+                password.setText("");
+                confirmPas.setText("");
+            }
         });
 
 
@@ -79,5 +95,17 @@ public class SignUpFragment extends Fragment implements IsignUp {
     public void onSignUpFailure(String error) {
         Toast.makeText(this.getContext(), error, Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void showLoading() {
+
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+
+        progressBar.setVisibility(View.GONE);
     }
 }

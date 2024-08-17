@@ -8,9 +8,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ratatouilleapp.R;
-import com.example.ratatouilleapp.View.AuthView;
 
-public class AuthActivity extends AppCompatActivity implements AuthView {
+
+public class AuthActivity extends AppCompatActivity  {
 
 //    private AuthPresenterImpl presenter;
 //    private ProgressBar progressBar;
@@ -55,43 +55,5 @@ public class AuthActivity extends AppCompatActivity implements AuthView {
         //NavigationUI.setupActionBarWithNavController(this,navController);
     }
 
-    @Override
-    public void showLoading() {
 
-        //   progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideLoading() {
-
-        // progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onSignInSuccess() {
-        // Toast.makeText(this, "Sign-In successful!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSignInFailure(String error) {
-
-        // Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-    }
-
-  //  @Override
-//    public void onSignUpSuccess() {
-//
-//        // Toast.makeText(this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    public void onSignUpFailure(String error) {
-//
-//        //   Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-//    }
-
-    @Override
-    public void onSignOut() {
-
-    }
 }
