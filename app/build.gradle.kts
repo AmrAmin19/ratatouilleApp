@@ -48,6 +48,15 @@ dependencies {
     implementation ("com.google.android.material:material:1.9.0")
     implementation ("androidx.navigation:navigation-fragment:2.5.3")
     implementation ("androidx.navigation:navigation-ui:2.5.3")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    // Gson
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
 
 }

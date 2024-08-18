@@ -22,8 +22,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Irepo model;
-    Button button;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +39,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
-        model=Respiratory.getInstance(this,new FireBaseAuthHandler());
-        button=findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                model.signOut();
-
-
-
-                Toast.makeText(MainActivity.this, "Sign out sucsess", Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
 
     }
