@@ -8,10 +8,12 @@ import java.util.List;
 
 public interface Ihome {
 
-    public  void  showCategories(List<Category> categories);
+    void  showCategories(List<Category> categories);
     void showError(String message);
-    public  void  showMeals(List<Meal> meals);
-    public  void  showAreas(List<Area> areas);
-    public void showMealsByArea(List<Meal> meals);
+    void  showMeals(List<Meal> meals);
+    void  showAreas(List<Area> areas);
+    void showMealsByArea(List<Meal> meals);
+    void showRandomMeal(List<Meal> meals);
+
     //public void  showMeals(List<Meal> meals);
 }

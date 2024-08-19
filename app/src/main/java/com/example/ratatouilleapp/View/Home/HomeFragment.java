@@ -4,16 +4,21 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
@@ -37,9 +42,15 @@ public class HomeFragment extends Fragment implements Ihome {
     private MealAdapter mealAdapter;
     private MealAdapter mealAdapterArea;
     private  AreaAdapter areaAdapter;
+    private CardView randomMeal;
+    private ImageView randomImage;
+    private  TextView randomText;
 
 
-    TextView catText;
+
+
+
+   // TextView catText;
 
 
 
@@ -55,6 +66,8 @@ public HomeFragment(){}
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
+
         return inflater.inflate(R.layout.fragment_home, container, false);
 
 
@@ -68,6 +81,10 @@ public HomeFragment(){}
         mealView=view.findViewById(R.id.mealRecycle);
         areaView=view.findViewById(R.id.AreaRycycle);
         mealByAreaView=view.findViewById(R.id.mealByArea);
+        randomMeal=view.findViewById(R.id.RandomMealCardView);
+        randomImage=view.findViewById(R.id.RandomMealImageView);
+        randomText=view.findViewById(R.id.randomMealTitleTextView);
+
         //catText=view.findViewById(R.id.catTitleText);
 
 
@@ -93,12 +110,17 @@ public HomeFragment(){}
         mealByAreaView.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false));
         mealByAreaView.setAdapter(mealAdapterArea);
 
+        //categories List
         presenter.getMealCategories();
         presenter.getMealByCategory("Beef");
 
+        //Area List
         presenter.getAreas();
-
         presenter.filterByArea("dutch");
+
+        //RandomMeal
+        presenter.getRandomMeal();
+
 
       //  updateTextView("Beef");
 
@@ -130,6 +152,19 @@ public HomeFragment(){}
     @Override
     public void showMealsByArea(List<Meal> meals) {
         mealAdapterArea.updateMeals(meals);
+    }
+
+    @Override
+    public void showRandomMeal(List<Meal> meals) {
+        Meal meal=meals.get(0);
+
+        randomText.setText(meal.getName());
+
+        Glide.with(this.getContext())
+                .load(meal.getThumbnailUrl())
+                .apply(new RequestOptions().override(200, 200))
+                .into(randomImage);
+
     }
 
 

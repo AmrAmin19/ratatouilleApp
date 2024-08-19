@@ -86,5 +86,21 @@ public class HomePresenter {
             }
         });
     }
+    public void getRandomMeal()
+    {
+        repo.getRandomMeal(new RepoCallback<List<Meal>>() {
+            @Override
+            public void onSuccess(List<Meal> result) {
+                view.showRandomMeal(result);
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                view.showError("no Random Meal ");
+
+            }
+        });
+    }
 
 }

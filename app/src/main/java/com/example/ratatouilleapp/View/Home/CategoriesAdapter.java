@@ -26,7 +26,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     private final Context context;
     private final List<Category> categories;
 
-    private int selectedPosition = -1;
+    private int selectedPosition = 0;
     HomeFragment homeFragment;
 
 

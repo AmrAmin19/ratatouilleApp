@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +27,7 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     private final Context context;
     private final List<Meal> meals;
+
 
     public MealAdapter(Context context,List<Meal> meals)
     {
@@ -52,6 +54,18 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
         Meal meal=meals.get(position);
         holder.textView.setText(meal.getName());
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(meal.getId());
+
+                Navigation.findNavController(v).navigate(action);
+
+            }
+        });
 
         Glide.with(context)
                 .load(meal.getThumbnailUrl())
@@ -83,6 +97,7 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
             imgView = layout.findViewById(R.id.mealImageView);
             textView = layout.findViewById(R.id.mealTitleTextView);
             button=layout.findViewById(R.id.favButton);
+
 
         }
     }
