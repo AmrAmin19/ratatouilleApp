@@ -193,4 +193,43 @@ public class NetworkManger {
         });
     }
 
+    public void getAllAreas(NetworkCallback<List<Area>> callback) {
+        Call<AreaResponse> call = apiServices.getAllAreas();
+        call.enqueue(new Callback<AreaResponse>() {
+            @Override
+            public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onResponseUpdate(response.body().getAreas());
+                } else {
+                    callback.onFailure(new Exception("Failed to load areas"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AreaResponse> call, Throwable throwable) {
+                callback.onFailure(throwable);
+            }
+        });
+    }
+
+    public void getAllIngredients(NetworkCallback<List<Ingredient>> callback) {
+        Call<IngredientResponse> call = apiServices.getAllIngredients();
+        call.enqueue(new Callback<IngredientResponse>() {
+            @Override
+            public void onResponse(Call<IngredientResponse> call, Response<IngredientResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onResponseUpdate(response.body().getIngredients());
+                } else {
+                    callback.onFailure(new Exception("Failed to load ingredients"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IngredientResponse> call, Throwable throwable) {
+                callback.onFailure(throwable);
+            }
+        });
+    }
+
+
 }

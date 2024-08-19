@@ -29,4 +29,11 @@ public interface ApiServices {
 
     @GET("filter.php")
     Call<MealResponse> filterByArea(@Query("a") String area);
+
+    @GET("list.php?a=list")
+    Call<AreaResponse> getAllAreas();
+
+
+    @GET("list.php?i=list")
+    Call<IngredientResponse> getAllIngredients();
 }

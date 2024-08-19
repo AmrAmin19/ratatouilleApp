@@ -3,7 +3,9 @@ package com.example.ratatouilleapp.Model.Repo;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
+import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.Api.NetworkCallback;
 import com.example.ratatouilleapp.Model.Api.NetworkManger;
@@ -185,6 +187,41 @@ public class Respiratory implements Irepo{
             @Override
             public void onFailure(Throwable throwable) {
                 callback.onError(throwable);
+            }
+        });
+    }
+
+    @Override
+    public void getIngrediants(final RepoCallback<List<Ingredient>> callback)
+    {
+        networkManger.getAllIngredients(new NetworkCallback<List<Ingredient>>() {
+            @Override
+            public void onResponseUpdate(List<Ingredient> data) {
+                callback.onSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                callback.onError(throwable);
+
+            }
+        });
+    }
+
+
+    @Override
+    public void getAreas(final RepoCallback<List<Area>> callback)
+    {
+        networkManger.getAllAreas(new NetworkCallback<List<Area>>() {
+            @Override
+            public void onResponseUpdate(List<Area> data) {
+                callback.onSuccess(data);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                callback.onError(throwable);
+
             }
         });
     }

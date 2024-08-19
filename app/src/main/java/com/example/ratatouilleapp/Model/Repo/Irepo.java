@@ -1,6 +1,8 @@
 package com.example.ratatouilleapp.Model.Repo;
 
+import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
+import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
@@ -19,4 +21,7 @@ public interface Irepo {
     public void filterMealsByIngredient(String ingredient, final RepoCallback<List<Meal>> callback);
     public void filterMealsByCategory(String category, final RepoCallback<List<Meal>> callback);
     public void filterMealsByArea(String area, final RepoCallback<List<Meal>> callback);
+
+    public void getIngrediants(final RepoCallback<List<Ingredient>> callback);
+    public void getAreas(final RepoCallback<List<Area>> callback);
 }
