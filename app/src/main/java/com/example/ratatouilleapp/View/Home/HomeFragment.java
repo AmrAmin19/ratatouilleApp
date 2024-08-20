@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment implements Ihome {
     private ImageView randomImage;
     private  TextView randomText;
 
+    private String mealId="";
 
 
 
@@ -122,7 +123,15 @@ public HomeFragment(){}
         presenter.getRandomMeal();
 
 
-      //  updateTextView("Beef");
+        randomMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(mealId);
+
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
 
 
     }
@@ -157,8 +166,11 @@ public HomeFragment(){}
     @Override
     public void showRandomMeal(List<Meal> meals) {
         Meal meal=meals.get(0);
+        mealId=meal.getId();
 
         randomText.setText(meal.getName());
+
+
 
         Glide.with(this.getContext())
                 .load(meal.getThumbnailUrl())
