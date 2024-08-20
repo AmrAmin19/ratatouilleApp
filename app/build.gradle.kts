@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id ("com.google.gms.google-services")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -37,10 +39,29 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation ("com.airbnb.android:lottie:6.0.0")
     implementation ("io.reactivex.rxjava3:rxjava:3.1.6")
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.1")
+    implementation ("com.google.android.material:material:1.9.0")
+    implementation ("androidx.navigation:navigation-fragment:2.5.3")
+    implementation ("androidx.navigation:navigation-ui:2.5.3")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    // Gson
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    // Views
+    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+
 }

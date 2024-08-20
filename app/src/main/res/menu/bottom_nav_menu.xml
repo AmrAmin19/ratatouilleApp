@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/home_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/baseline_search_24"
+        android:title="Search" />
+
+    <item
+        android:id="@+id/favFragment"
+        android:icon="@drawable/baseline_favorite_border_24"
+        android:title="favorites" />
+
+    <item
+        android:id="@+id/planFragment"
+        android:icon="@drawable/baseline_calendar_today_24"
+        android:title="Plan" />
+
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/account_circle_24dp_e8eaed_fill0_wght400_grad0_opsz24"
+        android:title="Profile" />
+
+</menu>
