@@ -87,7 +87,7 @@ public class Respiratory implements Irepo{
     }
 
     @Override
-    public void getMealsByFirstLetter(char letter, final RepoCallback<List<Meal>> callback) {
+    public void getMealsByFirstLetter(String letter, final RepoCallback<List<Meal>> callback) {
         networkManger.getMealsByFirstLetter(letter, new NetworkCallback<List<Meal>>() {
             @Override
             public void onResponseUpdate(List<Meal> meals) {

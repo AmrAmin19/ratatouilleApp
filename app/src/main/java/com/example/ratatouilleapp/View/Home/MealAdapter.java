@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Home.HomeView.HomeFragmentDirections;
 
 import java.util.List;
 

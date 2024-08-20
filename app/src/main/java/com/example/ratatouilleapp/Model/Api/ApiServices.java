@@ -10,7 +10,7 @@ public interface ApiServices {
     Call<MealResponse> searchMealByName(@Query("s") String mealName);
 
     @GET("search.php")
-    Call<MealResponse> listMealsByFirstLetter(@Query("f") char firstLetter);
+    Call<MealResponse> listMealsByFirstLetter(@Query("f") String firstLetter);
 
     @GET("lookup.php")
     Call<MealResponse> lookupMealById(@Query("i") String mealId);

@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View.Home;
+package com.example.ratatouilleapp.View.Home.HomeView;
 
 import android.os.Bundle;
 
@@ -26,6 +26,7 @@ import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.HomePresenter;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@ public interface Irepo {
     void signOut();
 
     public void searchMealByName(String mealName, final RepoCallback<List<Meal>> callback);
-    public void getMealsByFirstLetter(char letter, final RepoCallback<List<Meal>> callback);
+    public void getMealsByFirstLetter(String letter, final RepoCallback<List<Meal>> callback);
     public void getMealById(String mealId, final RepoCallback<List<Meal>> callback);
     public void getRandomMeal(final RepoCallback<List<Meal>> callback);
     public void getMealCategories(final RepoCallback<List<Category>> callback);

@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View.Home;
+package com.example.ratatouilleapp.View.Home.DetailsView;
 
 import com.example.ratatouilleapp.Model.Api.Meal;
 
