@@ -73,56 +73,6 @@ public class SearchFragment extends Fragment implements Isearch {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        //List category
-//
-//        categoryList.add("Beef");
-//        categoryList.add("Breakfast");
-//        categoryList.add("Chicken");
-//        categoryList.add("Dessert");
-//        categoryList.add("Goat");
-//        categoryList.add("Lamb");
-//        categoryList.add("Miscellaneous");
-//        categoryList.add("Pasta");
-//        categoryList.add("Pork");
-//        categoryList.add("Seafood");
-//        categoryList.add("Side");
-//        categoryList.add("Starter");
-//        categoryList.add("Vegan");
-//        categoryList.add("Vegetarian");
-//
-//        //List Area
-//
-//        areaList.add("American");
-//        areaList.add("British");
-//        areaList.add("Canadian");
-//        areaList.add("Chinese");
-//        areaList.add("Croatian");
-//        areaList.add("Dutch");
-//        areaList.add("Egyptian");
-//        areaList.add("Filipino");
-//        areaList.add("French");
-//        areaList.add("Greek");
-//        areaList.add("Indian");
-//        areaList.add("Irish");
-//        areaList.add("Italian");
-//        areaList.add("Jamaican");
-//        areaList.add("Japanese");
-//        areaList.add("Kenyan");
-//        areaList.add("Malaysian");
-//        areaList.add("Mexican");
-//        areaList.add("Moroccan");
-//        areaList.add("Polish");
-//        areaList.add("Portuguese");
-//        areaList.add("Russian");
-//        areaList.add("Spanish");
-//        areaList.add("Thai");
-//        areaList.add("Tunisian");
-//        areaList.add("Turkish");
-//        areaList.add("Ukrainian");
-//        areaList.add("Unknown");
-//        areaList.add("Vietnamese");
-
-
 
 
         return inflater.inflate(R.layout.fragment_search, container, false);
@@ -138,7 +88,7 @@ public class SearchFragment extends Fragment implements Isearch {
 
         searchMealAdabter=new MealAdapter(this.getContext(),new ArrayList<>());
 
-        searchMeal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
+//        searchMeal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
         searchMeal.setAdapter(searchMealAdabter);
 
         presenter=new SearchPresenter( Respiratory.getInstance(this.getContext(),new FireBaseAuthHandler()),this);
@@ -166,54 +116,9 @@ public class SearchFragment extends Fragment implements Isearch {
                     }
                 }, throwable -> Log.e("SearchError", "Error processing search", throwable)));
 
-//        disposables.add(searchSubject
-//                .debounce(500, TimeUnit.MILLISECONDS)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .filter(query -> !query.isEmpty())
-//                .flatMap(this::findBestMatch)  // Match the user input to the best match from the lists
-//                .subscribe(result -> presenter.performSearch(result.first, result.second),
-//                        throwable -> Log.e("SearchError", "Error processing search", throwable)));
     }
 
-     // working with BUGS
-
-//    private void setupSearchView(SearchView searchView, PublishSubject<String> searchSubject) {
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                searchSubject.onNext(query.trim());
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                searchSubject.onNext(newText.trim());
-//                return true;
-//            }
-//        });
-//    }
-//
-//
-//
-//
-//    private Observable<Pair<String, String>> findBestMatch(String formattedInput) {
-//        return Observable.fromCallable(() -> {
-//            // Check areas
-//            for (String area : areaList) {
-//                if (area.equalsIgnoreCase(formattedInput)) {
-//                    return new Pair<>(formattedInput, "area");
-//                }
-//            }
-//            // Check categories
-//            for (String category : categoryList) {
-//                if (category.equalsIgnoreCase(formattedInput)) {
-//                    return new Pair<>(formattedInput, "categories");
-//                }
-//            }
-//            // Default to name if no match found
-//            return new Pair<>(formattedInput, "name");
-//        }).subscribeOn(Schedulers.io());
-//    }
+   
 
 
     public void setupSearchView(SearchView searchView, PublishSubject<String> searchSubject, String searchType) {
@@ -226,8 +131,8 @@ public class SearchFragment extends Fragment implements Isearch {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                searchSubject.onNext(newText.trim() + ":" + searchType);
-                Log.d("TAG", "onQueryTextChange: ");
+                searchSubject.onNext(newText.trim() + ":" + searchType);
+                //Log.d("onTextAmr", newText.trim());
                 return true;
             }
         });
