@@ -34,7 +34,7 @@
 
                     android:fontFamily="@font/abhaya_libre_extrabold"
                     android:gravity="center"
-                    android:text="EatsEase"
+                    android:text="Ratatouille"
                     android:textColor="@color/primaryColor"
                     android:textSize="24sp"
                     android:textStyle="bold" />

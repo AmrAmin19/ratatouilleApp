@@ -45,7 +45,7 @@ public class SearchFragment extends Fragment implements Isearch , FavHandler {
 
     private RecyclerView searchMeal;
     private ChipGroup chipGroup;
-    private MealAdapter searchMealAdabter;
+    private SearchAdapter searchMealAdabter;
 
     private SearchView searchEditText;
     private Disposable disposable;
@@ -92,7 +92,7 @@ public class SearchFragment extends Fragment implements Isearch , FavHandler {
         searchEditText=view.findViewById(R.id.searchView);
         //fix
 
-        searchMealAdabter=new MealAdapter(this.getContext(),new ArrayList<>(),this  , new ArrayList<>());
+        searchMealAdabter=new SearchAdapter(this.getContext(),new ArrayList<>(),this  , new ArrayList<>());
 
 //        searchMeal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
         searchMeal.setAdapter(searchMealAdabter);

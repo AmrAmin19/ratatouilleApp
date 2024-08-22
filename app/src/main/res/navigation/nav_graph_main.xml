@@ -18,12 +18,20 @@
         android:id="@+id/searchFragment"
         android:name="com.example.ratatouilleapp.View.Home.SearchView.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favFragment"
-        android:name="com.example.ratatouilleapp.View.Home.FavFragment"
+        android:name="com.example.ratatouilleapp.View.Favorite.FavFragment"
         android:label="fragment_fav"
-        tools:layout="@layout/fragment_fav" />
+        tools:layout="@layout/fragment_fav" >
+        <action
+            android:id="@+id/action_favFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/planFragment"
         android:name="com.example.ratatouilleapp.View.Home.PlanFragment"
