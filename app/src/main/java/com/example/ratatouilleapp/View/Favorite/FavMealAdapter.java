@@ -1,11 +1,9 @@
-package com.example.ratatouilleapp.View.Home;
+package com.example.ratatouilleapp.View.Favorite;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,23 +17,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.DB.FavMeal;
-import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
-import com.example.ratatouilleapp.Model.Repo.Respiratory;
-import com.example.ratatouilleapp.Presenter.HomePresenter;
 import com.example.ratatouilleapp.R;
-import com.example.ratatouilleapp.View.Home.HomeView.HomeFragment;
-import com.example.ratatouilleapp.View.Home.HomeView.HomeFragmentDirections;
-import com.example.ratatouilleapp.View.Home.HomeView.Ihome;
+import com.example.ratatouilleapp.View.Home.FavHandler;
+
+import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.List;
 
-public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
+public class FavMealAdapter extends   RecyclerView.Adapter<FavMealAdapter.ViewHolder>{
+
 
     private final Context context;
-    private final List<Meal> meals;
     FavHandler favHandler;
     List<FavMeal> favMeals;
 
@@ -45,20 +39,16 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
 
 
-    public MealAdapter(Context context,List<Meal> meals, FavHandler favHandler ,List<FavMeal> favMeals)
+    public FavMealAdapter(Context context, FavHandler favHandler ,List<FavMeal> favMeals)
     {
 
         this.favMeals=favMeals;
         this.context=context;
-        this.meals=meals;
+
         this.favHandler=favHandler;
     }
 
-    public void updateMeals(List<Meal> meals) {
-        this.meals.clear();
-        this.meals.addAll(meals);
-        notifyDataSetChanged();
-    }
+
 
 
     public void updateFavMeals(List<FavMeal> favMeals)
@@ -70,24 +60,22 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavMealAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View row = inflater.inflate(R.layout.meal_home_item, parent, false);
-        return new MealAdapter.ViewHolder(row);
+        return new FavMealAdapter.ViewHolder(row);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-
-        Meal meal=meals.get(position);
+        FavMeal meal=favMeals.get(position);
         holder.textView.setText(meal.getName());
 
 
         holder.button.setSelected(isMealFavorite(meal.getId()));
 
 
-        FavMeal favMeal = new FavMeal(meal.getId(), meal.getName(), meal.getThumbnailUrl());
+       // FavMeal favMeal = new FavMeal(meal.getId(), meal.getName(), meal.getThumbnailUrl());
 
 
         holder.button.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +86,11 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
 
                 if (isMealFavorite(meal.getId())) {
-                    favHandler.delet(favMeal);
+                    favHandler.delet(meal);
                     Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();
                     holder.button.setSelected(false);
                 } else {
-                    favHandler.insert(favMeal);
+                    favHandler.insert(meal);
                     Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
                     holder.button.setSelected(true);
                 }
@@ -122,8 +110,8 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
 
-                HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(meal.getId());
+                FavFragmentDirections.ActionFavFragmentToDetailsFragment action =
+                        FavFragmentDirections.actionFavFragmentToDetailsFragment(meal.getId());
 
                 Navigation.findNavController(v).navigate(action);
 
@@ -138,9 +126,11 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     }
 
+
+
     @Override
     public int getItemCount() {
-        return meals.size();
+        return favMeals.size();
     }
 
 
@@ -173,5 +163,4 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
         }
         return false; // The meal is not in the favorites list
     }
-
 }

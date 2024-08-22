@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View.Home;
+package com.example.ratatouilleapp.View.Home.HomeView;
 
 import android.content.Context;
 import android.view.LayoutInflater;

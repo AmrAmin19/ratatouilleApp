@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View.Home;
+package com.example.ratatouilleapp.View.Home.HomeView;
 
 import android.os.Bundle;
 
@@ -22,16 +22,19 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.HomePresenter;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Home.FavHandler;
+import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment implements Ihome {
+public class HomeFragment extends Fragment implements Ihome, FavHandler {
 
     private RecyclerView categoriesView;
     private  RecyclerView mealView;
@@ -46,12 +49,10 @@ public class HomeFragment extends Fragment implements Ihome {
     private ImageView randomImage;
     private  TextView randomText;
 
+
     private String mealId="";
 
 
-
-
-   // TextView catText;
 
 
 
@@ -93,9 +94,9 @@ public HomeFragment(){}
         presenter=new HomePresenter(this,Respiratory.getInstance(this.getContext(),new FireBaseAuthHandler()));
 
         categoriesAdapter = new CategoriesAdapter(new ArrayList<>(), this.getContext(),this);
-        mealAdapter=new MealAdapter(this.getContext(),new ArrayList<>());
+        mealAdapter=new MealAdapter(this.getContext(),new ArrayList<>(),this , new ArrayList<>());
         areaAdapter=new AreaAdapter(this.getContext(),new ArrayList<>(),this);
-        mealAdapterArea=new MealAdapter(this.getContext(),new ArrayList<>());
+        mealAdapterArea=new MealAdapter(this.getContext(),new ArrayList<>(),this, new ArrayList<>());
 
 
 
@@ -132,6 +133,8 @@ public HomeFragment(){}
                 Navigation.findNavController(v).navigate(action);
             }
         });
+
+        presenter.getFavList();
 
 
     }
@@ -180,16 +183,34 @@ public HomeFragment(){}
     }
 
 
-    //    public void updateTextView(String newText) {
-//        if (catText != null) {
-//            catText.setText(newText);
-//        }
-//    }
+
     public void updateListByCategory(String category)
     {
        presenter.getMealByCategory(category);
     }
     public void updateListByArea(String area){presenter.filterByArea(area);};
+
+    @Override
+    public void insert(FavMeal meal) {
+        presenter.insert(meal);
+    }
+
+    @Override
+    public void delet(FavMeal meal) {
+        presenter.delet(meal);
+    }
+
+
+
+
+    @Override
+    public void ShowMealFavorite(List<FavMeal> favMeals)
+    {
+        mealAdapter.updateFavMeals(favMeals);
+        mealAdapterArea.updateFavMeals(favMeals);
+    }
+
+
 
 
 }

@@ -60,7 +60,7 @@ public class NetworkManger {
         });
     }
 
-    public void getMealsByFirstLetter(char letter, final NetworkCallback<List<Meal>> networkCallback) {
+    public void getMealsByFirstLetter(String letter, final NetworkCallback<List<Meal>> networkCallback) {
         Call<MealResponse> call = apiServices.listMealsByFirstLetter(letter);
         call.enqueue(new Callback<MealResponse>() {
             @Override

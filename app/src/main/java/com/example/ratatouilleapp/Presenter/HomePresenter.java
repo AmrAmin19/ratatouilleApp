@@ -1,14 +1,16 @@
 package com.example.ratatouilleapp.Presenter;
 
 import android.util.Log;
-import android.widget.Toast;
+
+import androidx.lifecycle.Observer;
 
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.FavMeal;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.Model.Repo.RepoCallback;
-import com.example.ratatouilleapp.View.Home.Ihome;
+import com.example.ratatouilleapp.View.Home.HomeView.Ihome;
 
 import java.util.List;
 
@@ -102,5 +104,26 @@ public class HomePresenter {
             }
         });
     }
+
+    public void insert(FavMeal meal)
+    {
+        repo.insert(meal);
+    }
+    public void  delet(FavMeal meal)
+    {
+        repo.delet(meal);
+    }
+
+    public void getFavList()
+    {
+        repo.getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
+            @Override
+            public void onChanged(List<FavMeal> favMeals) {
+                view.ShowMealFavorite(favMeals);
+            }
+        });
+    }
+
+
 
 }

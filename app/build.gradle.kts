@@ -63,5 +63,9 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
+    //Room
+    implementation ("androidx.room:room-runtime:2.4.1")
+    annotationProcessor ("androidx.room:room-compiler:2.4.1")
+
 
 }

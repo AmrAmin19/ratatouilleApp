@@ -1,11 +1,9 @@
-package com.example.ratatouilleapp.View.Home;
+package com.example.ratatouilleapp.View.Home.SearchView;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,20 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.DB.FavMeal;
-import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
-import com.example.ratatouilleapp.Model.Repo.Respiratory;
-import com.example.ratatouilleapp.Presenter.HomePresenter;
 import com.example.ratatouilleapp.R;
-import com.example.ratatouilleapp.View.Home.HomeView.HomeFragment;
+import com.example.ratatouilleapp.View.Home.FavHandler;
 import com.example.ratatouilleapp.View.Home.HomeView.HomeFragmentDirections;
-import com.example.ratatouilleapp.View.Home.HomeView.Ihome;
+import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.List;
 
-public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
+public class SearchAdapter extends  RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private final Context context;
     private final List<Meal> meals;
@@ -45,7 +39,7 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
 
 
-    public MealAdapter(Context context,List<Meal> meals, FavHandler favHandler ,List<FavMeal> favMeals)
+    public SearchAdapter(Context context,List<Meal> meals, FavHandler favHandler ,List<FavMeal> favMeals)
     {
 
         this.favMeals=favMeals;
@@ -70,10 +64,10 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View row = inflater.inflate(R.layout.meal_home_item, parent, false);
-        return new MealAdapter.ViewHolder(row);
+        return new SearchAdapter.ViewHolder(row);
     }
 
     @Override
@@ -122,8 +116,8 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
 
-                HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(meal.getId());
+                SearchFragmentDirections.ActionSearchFragmentToDetailsFragment action =
+                        SearchFragmentDirections.actionSearchFragmentToDetailsFragment(meal.getId());
 
                 Navigation.findNavController(v).navigate(action);
 
@@ -136,7 +130,9 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
                 .into(holder.imgView);
 
 
+
     }
+
 
     @Override
     public int getItemCount() {

@@ -3,7 +3,7 @@ package com.example.ratatouilleapp.Presenter;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.Model.Repo.RepoCallback;
-import com.example.ratatouilleapp.View.Home.Idetails;
+import com.example.ratatouilleapp.View.Home.DetailsView.Idetails;
 
 
 import java.util.List;
