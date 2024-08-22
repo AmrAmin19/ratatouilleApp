@@ -18,10 +18,13 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.SearchPresenter;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Home.FavHandler;
+import com.example.ratatouilleapp.View.Home.HomeView.HomeFragment;
 import com.example.ratatouilleapp.View.Home.MealAdapter;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -38,7 +41,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 
-public class SearchFragment extends Fragment implements Isearch {
+public class SearchFragment extends Fragment implements Isearch , FavHandler {
 
     private RecyclerView searchMeal;
     private ChipGroup chipGroup;
@@ -48,12 +51,14 @@ public class SearchFragment extends Fragment implements Isearch {
     private Disposable disposable;
     private CompositeDisposable disposables = new CompositeDisposable();
     private PublishSubject<String> searchSubject = PublishSubject.create();
-   // AtomicReference<String> searchTypeRef;
+
 
 //    private List<String> categoryList=new ArrayList<>();
 //    private List<String> areaList=new ArrayList<>();
 
     SearchPresenter presenter;
+
+    Boolean isFav=false;
 
 
 
@@ -85,13 +90,15 @@ public class SearchFragment extends Fragment implements Isearch {
         searchMeal=view.findViewById(R.id.recycleSearch);
         chipGroup=view.findViewById(R.id.chipGroup);
         searchEditText=view.findViewById(R.id.searchView);
+        //fix
 
-        searchMealAdabter=new MealAdapter(this.getContext(),new ArrayList<>());
+        searchMealAdabter=new MealAdapter(this.getContext(),new ArrayList<>(),this  , new ArrayList<>());
 
 //        searchMeal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
         searchMeal.setAdapter(searchMealAdabter);
 
         presenter=new SearchPresenter( Respiratory.getInstance(this.getContext(),new FireBaseAuthHandler()),this);
+        presenter.getFavList();
 
 
 
@@ -118,7 +125,7 @@ public class SearchFragment extends Fragment implements Isearch {
 
     }
 
-   
+
 
 
     public void setupSearchView(SearchView searchView, PublishSubject<String> searchSubject, String searchType) {
@@ -195,4 +202,25 @@ public class SearchFragment extends Fragment implements Isearch {
         }
 
     }
+
+    @Override
+    public void ShowMealFavorite(List<FavMeal> favMeals) {
+        searchMealAdabter.updateFavMeals(favMeals);
+    }
+
+
+    @Override
+    public void insert(FavMeal meal) {
+        presenter.insert(meal);
+    }
+
+    @Override
+    public void delet(FavMeal meal) {
+        presenter.delet(meal);
+    }
+
+
+
+
+
 }

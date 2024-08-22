@@ -1,9 +1,12 @@
 package com.example.ratatouilleapp.Model.Repo;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
 import java.util.List;
@@ -24,4 +27,12 @@ public interface Irepo {
 
     public void getIngrediants(final RepoCallback<List<Ingredient>> callback);
     public void getAreas(final RepoCallback<List<Area>> callback);
+
+    public  void  delet(FavMeal meal);
+    public void insert(FavMeal meal);
+    public LiveData<List<FavMeal>> getStoredFavMeals();
+
+    public LiveData<Boolean> getFavMealById(String mealId);
+
+
 }

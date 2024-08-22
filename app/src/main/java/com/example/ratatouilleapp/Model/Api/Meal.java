@@ -1,5 +1,9 @@
 package com.example.ratatouilleapp.Model.Api;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Field;
@@ -76,6 +80,7 @@ import java.util.List;
 //        this.thumbnailUrl = thumbnailUrl;
 //    }
 //}
+
 public class Meal {
     @SerializedName("idMeal")
     private String id;

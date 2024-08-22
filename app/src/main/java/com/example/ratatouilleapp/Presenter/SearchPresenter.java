@@ -1,6 +1,9 @@
 package com.example.ratatouilleapp.Presenter;
 
+import androidx.lifecycle.Observer;
+
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.FavMeal;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.Model.Repo.RepoCallback;
 import com.example.ratatouilleapp.View.Home.SearchView.Isearch;
@@ -124,6 +127,16 @@ public class SearchPresenter {
         }
     }
 
+    public void getFavList()
+    {
+        repo.getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
+            @Override
+            public void onChanged(List<FavMeal> favMeals) {
+                view.ShowMealFavorite(favMeals);
+            }
+        });
+    }
+
     public String getMatch(String cat) {
         // Convert the input string to lowercase
         String query = "";
@@ -161,6 +174,19 @@ public class SearchPresenter {
 
         return query.isEmpty() ? null : query;
     }
+
+    public void insert(FavMeal meal)
+    {
+        repo.insert(meal);
+    }
+    public void  delet(FavMeal meal)
+    {
+        repo.delet(meal);
+    }
+
+
+
+
 
 
 }
