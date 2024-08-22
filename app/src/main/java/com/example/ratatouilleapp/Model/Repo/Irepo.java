@@ -6,7 +6,7 @@ import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
 import java.util.List;

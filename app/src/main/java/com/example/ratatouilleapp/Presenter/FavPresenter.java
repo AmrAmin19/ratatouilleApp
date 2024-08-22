@@ -2,9 +2,9 @@ package com.example.ratatouilleapp.Presenter;
 
 import androidx.lifecycle.Observer;
 
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
-import com.example.ratatouilleapp.View.Favorite.Ifav;
+import com.example.ratatouilleapp.View.Home.FavoriteView.Ifav;
 
 import java.util.List;
 

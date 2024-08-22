@@ -2,7 +2,6 @@ package com.example.ratatouilleapp.Model.Repo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -12,17 +11,12 @@ import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.Api.NetworkCallback;
 import com.example.ratatouilleapp.Model.Api.NetworkManger;
-import com.example.ratatouilleapp.Model.DB.AppDatabase;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
-import com.example.ratatouilleapp.Model.DB.MealDAO;
+import com.example.ratatouilleapp.Model.DB.FavMeal.AppDatabase;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class Respiratory implements Irepo{
     private Context context;

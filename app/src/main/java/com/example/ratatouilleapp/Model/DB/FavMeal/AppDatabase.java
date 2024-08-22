@@ -1,12 +1,10 @@
-package com.example.ratatouilleapp.Model.DB;
+package com.example.ratatouilleapp.Model.DB.FavMeal;
 
 import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
-import com.example.ratatouilleapp.Model.Api.Meal;
 
 @Database(entities ={FavMeal.class},version = 1)
 public abstract class AppDatabase extends RoomDatabase {

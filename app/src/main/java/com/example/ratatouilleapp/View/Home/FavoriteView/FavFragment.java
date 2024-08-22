@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View.Favorite;
+package com.example.ratatouilleapp.View.Home.FavoriteView;
 
 import android.os.Bundle;
 
@@ -11,14 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.FavPresenter;
-import com.example.ratatouilleapp.Presenter.HomePresenter;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.Home.FavHandler;
-import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

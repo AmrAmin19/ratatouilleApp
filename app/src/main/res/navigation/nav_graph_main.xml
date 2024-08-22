@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/favFragment"
-        android:name="com.example.ratatouilleapp.View.Favorite.FavFragment"
+        android:name="com.example.ratatouilleapp.View.Home.FavoriteView.FavFragment"
         android:label="fragment_fav"
         tools:layout="@layout/fragment_fav" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/planFragment"
-        android:name="com.example.ratatouilleapp.View.Home.PlanFragment"
+        android:name="com.example.ratatouilleapp.View.Home.PlanView.PlanFragment"
         android:label="fragment_plan"
         tools:layout="@layout/fragment_plan" />
     <fragment

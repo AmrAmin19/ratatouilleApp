@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.Model.DB;
+package com.example.ratatouilleapp.Model.DB.FavMeal;
 
 
 import androidx.annotation.NonNull;

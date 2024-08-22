@@ -5,11 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,27 +16,22 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.SearchPresenter;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.Home.FavHandler;
-import com.example.ratatouilleapp.View.Home.HomeView.HomeFragment;
-import com.example.ratatouilleapp.View.Home.MealAdapter;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public class SearchFragment extends Fragment implements Isearch , FavHandler {

@@ -22,7 +22,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.HomePresenter;
