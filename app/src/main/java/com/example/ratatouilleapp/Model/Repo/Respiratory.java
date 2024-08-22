@@ -11,9 +11,11 @@ import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.Api.NetworkCallback;
 import com.example.ratatouilleapp.Model.Api.NetworkManger;
-import com.example.ratatouilleapp.Model.DB.FavMeal.AppDatabase;
+import com.example.ratatouilleapp.Model.DB.AppDatabase;
 import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
+import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
+import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
 import java.util.List;
@@ -26,6 +28,9 @@ public class Respiratory implements Irepo{
     private MealDAO mealDAO;
     private LiveData<List<FavMeal>> storedMeal;
 
+    private PlanDAO planDAO;
+    private LiveData<List<Plan>> storedPlan;
+
     private Respiratory(Context context , IfireBaseAuth ifireBaseAuth)
     {
         this.context=context;
@@ -34,6 +39,9 @@ public class Respiratory implements Irepo{
         AppDatabase db= AppDatabase.getInstance(context.getApplicationContext());
         mealDAO = db.getMealDao();
         storedMeal=mealDAO.getFavMeals();
+
+        planDAO=db.getPlanDao();
+        storedPlan=planDAO.getPlans();
 
 
     }
@@ -237,7 +245,9 @@ public class Respiratory implements Irepo{
         });
     }
 
-    // Database
+
+
+    // Database Meal
     public LiveData<List<FavMeal>> getStoredFavMeals()
     {
         return  storedMeal;
@@ -254,6 +264,7 @@ public class Respiratory implements Irepo{
         }).start();
     }
 
+
     public void insert(FavMeal meal)
     {
         new Thread(new Runnable() {
@@ -264,13 +275,32 @@ public class Respiratory implements Irepo{
         }).start();
     }
 
-    //change with Rx or bool  ------
 
+    //Database Plan
 
-    public LiveData<Boolean> getFavMealById(String mealId) {
+    public LiveData<List<Plan>> getStoredPlan()
+    {
+        return storedPlan;
+    }
 
-            return mealDAO.hasFavorite(mealId);
+     public   void insertPlan(Plan plan)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                planDAO.insertPlan(plan);
+            }
+        }).start();
+    }
 
+    public void deletPlan(Plan plan)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                planDAO.deletPlan(plan);
+            }
+        }).start();
     }
 
 

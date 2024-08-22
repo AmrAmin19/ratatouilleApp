@@ -11,7 +11,7 @@ public class Plan {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private  String id;
+    private  int id;
 
     
     private  String mealId;
@@ -20,14 +20,24 @@ public class Plan {
 
     private  String mealImage;
 
-    private  Date planDate;
+    private  String planDate;
 
 
-    public Date getPlanDate() {
+    public Plan(){}
+
+
+    public Plan(String mealId, String mealName, String mealImage, String planDate) {
+        this.mealId = mealId;
+        this.mealName = mealName;
+        this.mealImage = mealImage;
+        this.planDate = planDate;
+    }
+
+    public String getPlanDate() {
         return planDate;
     }
 
-    public void setPlanDate(Date planDate) {
+    public void setPlanDate(String planDate) {
         this.planDate = planDate;
     }
 
@@ -55,11 +65,11 @@ public class Plan {
         this.mealId = mealId;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 }
