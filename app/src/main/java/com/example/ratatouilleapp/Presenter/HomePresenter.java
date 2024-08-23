@@ -114,8 +114,10 @@ public class HomePresenter {
         repo.delet(meal);
     }
 
+
     public void getFavList()
     {
+//        repo.getUserEmail();
         repo.getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
             @Override
             public void onChanged(List<FavMeal> favMeals) {

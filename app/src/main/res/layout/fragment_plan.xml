@@ -5,7 +5,62 @@
     android:layout_height="match_parent"
     tools:context=".View.Home.PlanView.PlanFragment">
 
- 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <ImageButton
+                android:id="@+id/btnPrevWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_arrow_back_ios_24"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Previous Week" />
+
+            <TextView
+                android:id="@+id/tvCurrentWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:text="Aug 19 - Aug 25" />
+
+            <ImageButton
+                android:id="@+id/btnNextWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Next Week" />
+
+        </LinearLayout>
+
+        <!-- TextView to display selected week range -->
+        <TextView
+            android:id="@+id/selectedWeekTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Selected Week: " />
+
+        <!-- RecyclerView to display meals for the selected day -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mealsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 </FrameLayout>

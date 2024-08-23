@@ -79,7 +79,11 @@ public class SearchAdapter extends  RecyclerView.Adapter<SearchAdapter.ViewHolde
         holder.button.setSelected(isMealFavorite(meal.getId()));
 
 
-        FavMeal favMeal = new FavMeal(meal.getId(), meal.getName(), meal.getThumbnailUrl());
+//        FavMeal favMeal = new FavMeal(meal.getId(), meal.getName(), meal.getThumbnailUrl(),"");
+        FavMeal favMeal = new FavMeal();
+        favMeal.setId(meal.getId());
+        favMeal.setName(meal.getName());
+        favMeal.setThumbnailUrl(meal.getThumbnailUrl());
 
 
         holder.button.setOnClickListener(new View.OnClickListener() {

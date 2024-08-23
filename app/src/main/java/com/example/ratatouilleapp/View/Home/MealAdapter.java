@@ -79,8 +79,10 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
         holder.button.setSelected(isMealFavorite(meal.getId()));
 
 
-        FavMeal favMeal = new FavMeal(meal.getId(), meal.getName(), meal.getThumbnailUrl());
-
+        FavMeal favMeal = new FavMeal();
+        favMeal.setId(meal.getId());
+        favMeal.setName(meal.getName());
+        favMeal.setThumbnailUrl(meal.getThumbnailUrl());
 
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +90,7 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
 
 
-
+//
                 if (isMealFavorite(meal.getId())) {
                     favHandler.delet(favMeal);
                     Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();

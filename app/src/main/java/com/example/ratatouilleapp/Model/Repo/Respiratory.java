@@ -20,7 +20,7 @@ import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
 import java.util.List;
 
-public class Respiratory implements Irepo{
+public class Respiratory implements Irepo {
     private Context context;
     private  static Respiratory repo = null;
     private IfireBaseAuth ifireBaseAuth;
@@ -28,17 +28,22 @@ public class Respiratory implements Irepo{
     private MealDAO mealDAO;
     private LiveData<List<FavMeal>> storedMeal;
 
+    private String userEmail;
+
     private PlanDAO planDAO;
     private LiveData<List<Plan>> storedPlan;
 
     private Respiratory(Context context , IfireBaseAuth ifireBaseAuth)
     {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        this.userEmail=sharedPreferences.getString("userEmail", null);
+
         this.context=context;
         this.ifireBaseAuth=ifireBaseAuth;
         this.networkManger = NetworkManger.getInstance();
         AppDatabase db= AppDatabase.getInstance(context.getApplicationContext());
         mealDAO = db.getMealDao();
-        storedMeal=mealDAO.getFavMeals();
+        storedMeal=mealDAO.getFavMeals(userEmail);
 
         planDAO=db.getPlanDao();
         storedPlan=planDAO.getPlans();
@@ -55,11 +60,34 @@ public class Respiratory implements Irepo{
         return repo;
     }
 
+    public String getUserEmail() {
+
+        return userEmail;
+    }
+
 
     @Override
-    public void signIn(String email, String password, IfireBaseAuth.AuthCallback callback) {
+    public void signIn(String email, String password,  RepoAuthCallback callback) {
 
-        ifireBaseAuth.signIn(email,password,callback);
+        ifireBaseAuth.signIn(email, password, new IfireBaseAuth.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+
+                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isSignedIn", true);
+                editor.putString("userEmail",email);
+                editor.apply();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onError(e);
+            }
+        });
+
+       // ifireBaseAuth.signIn(email,password,callback);
 
 //        SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -70,9 +98,29 @@ public class Respiratory implements Irepo{
     }
 
     @Override
-    public void signUp(String email, String password, IfireBaseAuth.AuthCallback callback) {
+    public void signUp(String email, String password, RepoAuthCallback callback) {
 
-        ifireBaseAuth.signUp(email,password,callback);
+        ifireBaseAuth.signUp(email, password, new IfireBaseAuth.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+
+//                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putBoolean("isSignedIn", true);
+//                editor.apply();
+
+            }
+
+
+            @Override
+            public void onFailure(Exception e) {
+
+                callback.onError(e);
+            }
+        });
+
+       // ifireBaseAuth.signUp(email,password,callback);
     }
 
     @Override
@@ -83,6 +131,7 @@ public class Respiratory implements Irepo{
         SharedPreferences sharedPreferences = (context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isSignedIn", false);
+        editor.putString("userEmail",null);
         editor.apply();
 
     }
@@ -255,11 +304,12 @@ public class Respiratory implements Irepo{
 
     public  void  delet(FavMeal meal)
     {
+        //meal.setUserEmail(getUserEmail());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mealDAO.deletMeal(meal);
+                mealDAO.deleteMealById(meal.getId(),getUserEmail());
             }
         }).start();
     }
@@ -267,6 +317,7 @@ public class Respiratory implements Irepo{
 
     public void insert(FavMeal meal)
     {
+        meal.setUserEmail(getUserEmail());
         new Thread(new Runnable() {
             @Override
             public void run() {

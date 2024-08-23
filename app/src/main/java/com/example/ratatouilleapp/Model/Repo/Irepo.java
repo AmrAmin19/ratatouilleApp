@@ -13,8 +13,8 @@ import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 import java.util.List;
 
 public interface Irepo {
-    void signIn(String email, String password, IfireBaseAuth.AuthCallback callback);
-    void signUp(String email, String password, IfireBaseAuth.AuthCallback callback);
+    void signIn(String email, String password, RepoAuthCallback callback);
+    void signUp(String email, String password, RepoAuthCallback callback);
     void signOut();
 
      void searchMealByName(String mealName, final RepoCallback<List<Meal>> callback);
@@ -37,6 +37,8 @@ public interface Irepo {
      LiveData<List<Plan>> getStoredPlan();
      void insertPlan(Plan plan);
    void deletPlan(Plan plan);
+
+     String getUserEmail();
 
 
 }
