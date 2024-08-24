@@ -1,5 +1,6 @@
 package com.example.ratatouilleapp.View.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Authentication.AuthActivity;
 import com.example.ratatouilleapp.View.MainActivity;
 
 
@@ -54,6 +56,11 @@ Button button;
             @Override
             public void onClick(View v) {
                 model.signOut();
+
+
+                Intent intent = new Intent(getActivity(), AuthActivity.class);
+                startActivity(intent);
+                getActivity().finish();
 
 
 

@@ -33,6 +33,8 @@ public class LogInFragment extends Fragment implements Ilogin {
     LoginFragmentPresenter presenter;
 
 
+
+
     public LogInFragment() {
         // Required empty public constructor
     }
@@ -63,7 +65,7 @@ public class LogInFragment extends Fragment implements Ilogin {
         progressBar = view.findViewById(R.id.progressBar);
 
         login.setOnClickListener(v -> {
-            String emailS = email.getText().toString();
+           String  emailS = email.getText().toString();
             String passwordS = password.getText().toString();
             presenter.signIn(emailS, passwordS);
             email.setText("");
@@ -90,13 +92,9 @@ public class LogInFragment extends Fragment implements Ilogin {
     @Override
     public void onSignInSuccess() {
 
-        //Shared pref : note try to make in repo
-//        SharedPreferences sharedPreferences = ((this.getContext()).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("isSignedIn", true);
-//        editor.apply();
 
-        Intent intent = new Intent(this.getContext(), MainActivity.class);
+
+        Intent intent = new Intent(this.getActivity(), MainActivity.class);
         startActivity(intent);
         this.getActivity().finish();
 

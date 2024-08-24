@@ -111,7 +111,7 @@ public class DetailsFragment extends Fragment implements Idetails {
                             // Use selectedDate as needed
                             Log.d("insideAmr", "onClick: "+ selectedDate);
 
-                            presenter.insert(new Plan(meal.getId(), meal.getName(), meal.getThumbnailUrl(),selectedDate));
+                            presenter.insert(new Plan(meal.getId(), meal.getName(), meal.getThumbnailUrl(),selectedDate,""));
                         },
                         year, month, day  // Pass the initialized values here
                 );

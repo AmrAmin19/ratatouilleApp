@@ -40,7 +40,7 @@ public class SplashActivity extends AppCompatActivity implements IsplashView {
 //        Intent intent = new Intent(SplashActivity.this, AuthActivity.class);
 //        startActivity(intent);
 //        finish();
-
+//
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         boolean isSignedIn = sharedPreferences.getBoolean("isSignedIn", false);
 

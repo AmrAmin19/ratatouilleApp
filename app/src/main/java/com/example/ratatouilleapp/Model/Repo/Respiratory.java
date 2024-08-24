@@ -1,6 +1,7 @@
 package com.example.ratatouilleapp.Model.Repo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
@@ -17,6 +18,7 @@ import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
+import com.example.ratatouilleapp.View.MainActivity;
 
 import java.util.List;
 
@@ -28,25 +30,25 @@ public class Respiratory implements Irepo {
     private MealDAO mealDAO;
     private LiveData<List<FavMeal>> storedMeal;
 
-    private String userEmail;
+  //  private String userEmail;
 
     private PlanDAO planDAO;
     private LiveData<List<Plan>> storedPlan;
 
+
+
     private Respiratory(Context context , IfireBaseAuth ifireBaseAuth)
     {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        this.userEmail=sharedPreferences.getString("userEmail", null);
 
         this.context=context;
         this.ifireBaseAuth=ifireBaseAuth;
         this.networkManger = NetworkManger.getInstance();
         AppDatabase db= AppDatabase.getInstance(context.getApplicationContext());
         mealDAO = db.getMealDao();
-        storedMeal=mealDAO.getFavMeals(userEmail);
+        storedMeal=mealDAO.getFavMeals(getUserEmail());
 
         planDAO=db.getPlanDao();
-        storedPlan=planDAO.getPlans();
+        storedPlan=planDAO.getPlans(getUserEmail());
 
 
     }
@@ -62,7 +64,10 @@ public class Respiratory implements Irepo {
 
     public String getUserEmail() {
 
-        return userEmail;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        return  sharedPreferences.getString("userEmail", null);
+
     }
 
 
@@ -74,11 +79,15 @@ public class Respiratory implements Irepo {
             public void onSuccess() {
                 callback.onSuccess();
 
-                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isSignedIn", true);
                 editor.putString("userEmail",email);
                 editor.apply();
+
+                storedMeal = mealDAO.getFavMeals(email);
+                storedPlan = planDAO.getPlans(email);
             }
 
             @Override
@@ -87,12 +96,7 @@ public class Respiratory implements Irepo {
             }
         });
 
-       // ifireBaseAuth.signIn(email,password,callback);
 
-//        SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("isSignedIn", true);
-//        editor.apply();
 
 
     }
@@ -105,10 +109,6 @@ public class Respiratory implements Irepo {
             public void onSuccess() {
                 callback.onSuccess();
 
-//                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putBoolean("isSignedIn", true);
-//                editor.apply();
 
             }
 
@@ -128,11 +128,15 @@ public class Respiratory implements Irepo {
 
         ifireBaseAuth.signOut();
 
-        SharedPreferences sharedPreferences = (context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isSignedIn", false);
-        editor.putString("userEmail",null);
+        editor.remove("userEmail");// This removes the userEmail entry
+        editor.clear(); // This clears all data in the preferences
         editor.apply();
+
+
 
     }
 
@@ -336,6 +340,7 @@ public class Respiratory implements Irepo {
 
      public   void insertPlan(Plan plan)
     {
+       plan.setUserEmail(getUserEmail());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -346,6 +351,7 @@ public class Respiratory implements Irepo {
 
     public void deletPlan(Plan plan)
     {
+        plan.setUserEmail(getUserEmail());
         new Thread(new Runnable() {
             @Override
             public void run() {
