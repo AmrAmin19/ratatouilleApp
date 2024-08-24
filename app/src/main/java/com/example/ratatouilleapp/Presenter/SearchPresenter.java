@@ -2,14 +2,15 @@ package com.example.ratatouilleapp.Presenter;
 
 import androidx.lifecycle.Observer;
 
-import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
-import com.example.ratatouilleapp.Model.Repo.RepoCallback;
 import com.example.ratatouilleapp.View.Home.SearchView.Isearch;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchPresenter {
     Irepo repo;
@@ -80,61 +81,85 @@ public class SearchPresenter {
     public void performSearch(String query, String searchType) {
         switch (searchType) {
             case "name":
-               repo.searchMealByName(query, new RepoCallback<List<Meal>>() {
-                   @Override
-                   public void onSuccess(List<Meal> result) {
-                       view.showMeals(result);
-                   }
-
-                   @Override
-                   public void onError(Throwable throwable) {
-                       view.showError("Search name ");
-
-                   }
-               });
+                repo.searchMealByName(query)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showMeals(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        );
+//               repo.searchMealByName(query, new RepoCallback<List<Meal>>() {
+//                   @Override
+//                   public void onSuccess(List<Meal> result) {
+//                       view.showMeals(result);
+//                   }
+//
+//                   @Override
+//                   public void onError(Throwable throwable) {
+//                       view.showError("Search name ");
+//
+//                   }
+//               });
                 break;
 
             case "categories":
+                repo.filterMealsByCategory(getMatch(query))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showMeals(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        );
 
-               repo.filterMealsByCategory(getMatch(query), new RepoCallback<List<Meal>>() {
-                   @Override
-                   public void onSuccess(List<Meal> result) {
-                       view.showMeals(result);
-                   }
-
-                   @Override
-                   public void onError(Throwable throwable) {
-                       view.showError("Search Category ");
-
-                   }
-               });
+//               repo.filterMealsByCategory(getMatch(query), new RepoCallback<List<Meal>>() {
+//                   @Override
+//                   public void onSuccess(List<Meal> result) {
+//                       view.showMeals(result);
+//                   }
+//
+//                   @Override
+//                   public void onError(Throwable throwable) {
+//                       view.showError("Search Category ");
+//
+//                   }
+//               });
                 break;
 
             case "area":
-              repo.filterMealsByArea(getMatchArea(query), new RepoCallback<List<Meal>>() {
-                  @Override
-                  public void onSuccess(List<Meal> result) {
-                      view.showMeals(result);
-                  }
+                repo.filterMealsByArea(getMatchArea(query))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showMeals(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        );
 
-                  @Override
-                  public void onError(Throwable throwable) {
-
-                      view.showError("Search Area ");
-                  }
-              });
+//              repo.filterMealsByArea(getMatchArea(query), new RepoCallback<List<Meal>>() {
+//                  @Override
+//                  public void onSuccess(List<Meal> result) {
+//                      view.showMeals(result);
+//                  }
+//
+//                  @Override
+//                  public void onError(Throwable throwable) {
+//
+//                      view.showError("Search Area ");
+//                  }
+//              });
                 break;
         }
     }
 
     public void getFavList()
     {
-        repo.getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
-            @Override
-            public void onChanged(List<FavMeal> favMeals) {
-                view.ShowMealFavorite(favMeals);
-            }
-        });
+        repo.getStoredFavMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        favMeals -> {
+                            view.ShowMealFavorite(favMeals);
+                        }
+                );
     }
 
     public String getMatch(String cat) {

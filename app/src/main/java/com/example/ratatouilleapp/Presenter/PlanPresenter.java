@@ -8,6 +8,9 @@ import com.example.ratatouilleapp.View.Home.PlanView.Iplan;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class PlanPresenter {
     Irepo repo;
     Iplan view;
@@ -20,13 +23,21 @@ public class PlanPresenter {
 
     public void getPlans()
     {
-        repo.getStoredPlan().observeForever(new Observer<List<Plan>>() {
-            @Override
-            public void onChanged(List<Plan> plans) {
-
-                view.showPlans(plans);
-            }
-        });
+        repo.getStoredPlan()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        plans -> {
+                            view.showPlans(plans);
+                        }
+                );
+//        .observeForever(new Observer<List<Plan>>() {
+//            @Override
+//            public void onChanged(List<Plan> plans) {
+//
+//                view.showPlans(plans);
+//            }
+//        });
     }
 
     public void inserPlan(Plan plan)

@@ -9,19 +9,22 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
+
 @Dao
 public interface PlanDAO {
 
 
 
     @Query("SELECT * FROM meal_plans WHERE userEmail = :userEmail")
-    LiveData<List<Plan>> getPlans(String userEmail);
+    Flowable<List<Plan>> getPlans(String userEmail);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertPlan(Plan plan);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertPlan(Plan plan);
 
     @Delete
-    void deletPlan(Plan plan);
+    Completable deletPlan(Plan plan);
 //    @Query("DELETE FROM meal_plans WHERE planDate = :date And mealId = :id AND userEmail = :userEmail" )
 //    void deletPlan(String date,String id,String userEmail);
 }

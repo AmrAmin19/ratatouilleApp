@@ -8,6 +8,9 @@ import com.example.ratatouilleapp.View.Home.FavoriteView.Ifav;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class FavPresenter {
     private Irepo repo;
     private Ifav view;
@@ -20,12 +23,14 @@ public class FavPresenter {
 
     public void getFavList()
     {
-        repo.getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
-            @Override
-            public void onChanged(List<FavMeal> favMeals) {
-                view.ShowMealFavorite(favMeals);
-            }
-        });
+        repo.getStoredFavMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        favMeals -> {
+                            view.ShowMealFavorite(favMeals);
+                        }
+                );
     }
     public void insert(FavMeal meal)
     {
