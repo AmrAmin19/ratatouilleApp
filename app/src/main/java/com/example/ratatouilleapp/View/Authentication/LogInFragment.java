@@ -91,10 +91,10 @@ public class LogInFragment extends Fragment implements Ilogin {
     public void onSignInSuccess() {
 
         //Shared pref : note try to make in repo
-        SharedPreferences sharedPreferences = ((this.getContext()).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isSignedIn", true);
-        editor.apply();
+//        SharedPreferences sharedPreferences = ((this.getContext()).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean("isSignedIn", true);
+//        editor.apply();
 
         Intent intent = new Intent(this.getContext(), MainActivity.class);
         startActivity(intent);

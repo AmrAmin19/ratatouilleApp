@@ -1,7 +1,7 @@
 package com.example.ratatouilleapp.View.Home.SearchView;
 
 import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.example.ratatouilleapp.View.Home.DetailsView;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,12 +21,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.DetailsPresenter;
 import com.example.ratatouilleapp.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -38,8 +41,12 @@ public class DetailsFragment extends Fragment implements Idetails {
     private  Button favBtm;
     private TextView instruction;
 
+    Meal meal;
+
     DetailsPresenter presenter;
     IngrediantAdapter adapter;
+
+    private String selectedDate;
 
 
 
@@ -86,11 +93,38 @@ public class DetailsFragment extends Fragment implements Idetails {
         presenter.getMealById(detailsFragmentArgs.getMealId());
 
 
+        calBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Use Calendar to get the current date
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Now pass these values to the DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getContext(),
+                        (view, selectedYear, selectedMonth, selectedDayOfMonth) -> {
+                             selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDayOfMonth;
+                            // Use selectedDate as needed
+                            Log.d("insideAmr", "onClick: "+ selectedDate);
+
+                            presenter.insert(new Plan(meal.getId(), meal.getName(), meal.getThumbnailUrl(),selectedDate));
+                        },
+                        year, month, day  // Pass the initialized values here
+                );
+                datePickerDialog.show();
+            }
+        });
+
+
     }
 
     @Override
     public void showMeal(List<Meal> meals) {
-       Meal meal= meals.get(0);
+        meal= meals.get(0);
 
        mealTitle.setText(meal.getName());
        instruction.setText(meal.getInstructions());

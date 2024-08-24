@@ -1,11 +1,9 @@
 package com.example.ratatouilleapp.View.Home;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,16 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
-import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
-import com.example.ratatouilleapp.Model.Repo.Respiratory;
-import com.example.ratatouilleapp.Presenter.HomePresenter;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.R;
-import com.example.ratatouilleapp.View.Home.HomeView.HomeFragment;
 import com.example.ratatouilleapp.View.Home.HomeView.HomeFragmentDirections;
-import com.example.ratatouilleapp.View.Home.HomeView.Ihome;
 
 import java.util.List;
 
@@ -87,8 +79,10 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
         holder.button.setSelected(isMealFavorite(meal.getId()));
 
 
-        FavMeal favMeal = new FavMeal(meal.getId(), meal.getName(), meal.getThumbnailUrl());
-
+        FavMeal favMeal = new FavMeal();
+        favMeal.setId(meal.getId());
+        favMeal.setName(meal.getName());
+        favMeal.setThumbnailUrl(meal.getThumbnailUrl());
 
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +90,7 @@ public class MealAdapter extends  RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
 
 
-
+//
                 if (isMealFavorite(meal.getId())) {
                     favHandler.delet(favMeal);
                     Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();

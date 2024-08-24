@@ -2,7 +2,6 @@ package com.example.ratatouilleapp.Model.Repo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -13,18 +12,15 @@ import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.Api.NetworkCallback;
 import com.example.ratatouilleapp.Model.Api.NetworkManger;
 import com.example.ratatouilleapp.Model.DB.AppDatabase;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
-import com.example.ratatouilleapp.Model.DB.MealDAO;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
+import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
+import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-public class Respiratory implements Irepo{
+public class Respiratory implements Irepo {
     private Context context;
     private  static Respiratory repo = null;
     private IfireBaseAuth ifireBaseAuth;
@@ -32,14 +28,25 @@ public class Respiratory implements Irepo{
     private MealDAO mealDAO;
     private LiveData<List<FavMeal>> storedMeal;
 
+    private String userEmail;
+
+    private PlanDAO planDAO;
+    private LiveData<List<Plan>> storedPlan;
+
     private Respiratory(Context context , IfireBaseAuth ifireBaseAuth)
     {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        this.userEmail=sharedPreferences.getString("userEmail", null);
+
         this.context=context;
         this.ifireBaseAuth=ifireBaseAuth;
         this.networkManger = NetworkManger.getInstance();
         AppDatabase db= AppDatabase.getInstance(context.getApplicationContext());
         mealDAO = db.getMealDao();
-        storedMeal=mealDAO.getFavMeals();
+        storedMeal=mealDAO.getFavMeals(userEmail);
+
+        planDAO=db.getPlanDao();
+        storedPlan=planDAO.getPlans();
 
 
     }
@@ -53,11 +60,34 @@ public class Respiratory implements Irepo{
         return repo;
     }
 
+    public String getUserEmail() {
+
+        return userEmail;
+    }
+
 
     @Override
-    public void signIn(String email, String password, IfireBaseAuth.AuthCallback callback) {
+    public void signIn(String email, String password,  RepoAuthCallback callback) {
 
-        ifireBaseAuth.signIn(email,password,callback);
+        ifireBaseAuth.signIn(email, password, new IfireBaseAuth.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+
+                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isSignedIn", true);
+                editor.putString("userEmail",email);
+                editor.apply();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onError(e);
+            }
+        });
+
+       // ifireBaseAuth.signIn(email,password,callback);
 
 //        SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -68,9 +98,29 @@ public class Respiratory implements Irepo{
     }
 
     @Override
-    public void signUp(String email, String password, IfireBaseAuth.AuthCallback callback) {
+    public void signUp(String email, String password, RepoAuthCallback callback) {
 
-        ifireBaseAuth.signUp(email,password,callback);
+        ifireBaseAuth.signUp(email, password, new IfireBaseAuth.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess();
+
+//                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putBoolean("isSignedIn", true);
+//                editor.apply();
+
+            }
+
+
+            @Override
+            public void onFailure(Exception e) {
+
+                callback.onError(e);
+            }
+        });
+
+       // ifireBaseAuth.signUp(email,password,callback);
     }
 
     @Override
@@ -81,6 +131,7 @@ public class Respiratory implements Irepo{
         SharedPreferences sharedPreferences = (context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isSignedIn", false);
+        editor.putString("userEmail",null);
         editor.apply();
 
     }
@@ -243,7 +294,9 @@ public class Respiratory implements Irepo{
         });
     }
 
-    // Database
+
+
+    // Database Meal
     public LiveData<List<FavMeal>> getStoredFavMeals()
     {
         return  storedMeal;
@@ -251,17 +304,20 @@ public class Respiratory implements Irepo{
 
     public  void  delet(FavMeal meal)
     {
+        //meal.setUserEmail(getUserEmail());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mealDAO.deletMeal(meal);
+                mealDAO.deleteMealById(meal.getId(),getUserEmail());
             }
         }).start();
     }
 
+
     public void insert(FavMeal meal)
     {
+        meal.setUserEmail(getUserEmail());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -270,13 +326,32 @@ public class Respiratory implements Irepo{
         }).start();
     }
 
-    //change with Rx or bool  ------
 
+    //Database Plan
 
-    public LiveData<Boolean> getFavMealById(String mealId) {
+    public LiveData<List<Plan>> getStoredPlan()
+    {
+        return storedPlan;
+    }
 
-            return mealDAO.hasFavorite(mealId);
+     public   void insertPlan(Plan plan)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                planDAO.insertPlan(plan);
+            }
+        }).start();
+    }
 
+    public void deletPlan(Plan plan)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                planDAO.deletPlan(plan);
+            }
+        }).start();
     }
 
 

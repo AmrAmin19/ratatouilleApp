@@ -1,4 +1,4 @@
-package com.example.ratatouilleapp.View.Favorite;
+package com.example.ratatouilleapp.View.Home.FavoriteView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,12 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.DB.FavMeal;
+import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.Home.FavHandler;
-
-import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.List;
 

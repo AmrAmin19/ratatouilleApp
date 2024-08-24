@@ -1,6 +1,7 @@
 package com.example.ratatouilleapp.Presenter;
 
 import com.example.ratatouilleapp.Model.Api.Meal;
+import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.Model.Repo.RepoCallback;
 import com.example.ratatouilleapp.View.Home.DetailsView.Idetails;
@@ -34,5 +35,9 @@ public class DetailsPresenter {
                 view.showError("no meal Id");
             }
         });
+    }
+    public void insert(Plan plan)
+    {
+        repo.insertPlan(plan);
     }
 }
