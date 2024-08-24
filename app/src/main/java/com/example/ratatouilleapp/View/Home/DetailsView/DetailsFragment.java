@@ -26,6 +26,7 @@ import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.DetailsPresenter;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Home.PlanView.WeekPickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,25 +98,34 @@ public class DetailsFragment extends Fragment implements Idetails {
             @Override
             public void onClick(View v) {
 
-                // Use Calendar to get the current date
-                final Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                // Now pass these values to the DatePickerDialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(),
-                        (view, selectedYear, selectedMonth, selectedDayOfMonth) -> {
-                             selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDayOfMonth;
-                            // Use selectedDate as needed
-                            Log.d("insideAmr", "onClick: "+ selectedDate);
+                WeekPickerDialog weekPickerDialog = new WeekPickerDialog(getContext(), selectedDate -> {
+                    Log.d("SelectedDate", "onClick: " + selectedDate);
+                    // Use the selected date in your plan or wherever needed
+                    presenter.insert(new Plan(meal.getId(), meal.getName(), meal.getThumbnailUrl(), selectedDate, ""));
+                    Toast.makeText(getContext(), "Meal Added To Plan", Toast.LENGTH_SHORT).show();
+                });
+                weekPickerDialog.show();
 
-                            presenter.insert(new Plan(meal.getId(), meal.getName(), meal.getThumbnailUrl(),selectedDate,""));
-                        },
-                        year, month, day  // Pass the initialized values here
-                );
-                datePickerDialog.show();
+//                // Use Calendar to get the current date
+//                final Calendar calendar = Calendar.getInstance();
+//                int year = calendar.get(Calendar.YEAR);
+//                int month = calendar.get(Calendar.MONTH);
+//                int day = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//                // Now pass these values to the DatePickerDialog
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(
+//                        getContext(),
+//                        (view, selectedYear, selectedMonth, selectedDayOfMonth) -> {
+//                             selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDayOfMonth;
+//                            // Use selectedDate as needed
+//                            Log.d("insideAmr", "onClick: "+ selectedDate);
+//
+//                            presenter.insert(new Plan(meal.getId(), meal.getName(), meal.getThumbnailUrl(),selectedDate,""));
+//                        },
+//                        year, month, day  // Pass the initialized values here
+//                );
+//                datePickerDialog.show();
             }
         });
 

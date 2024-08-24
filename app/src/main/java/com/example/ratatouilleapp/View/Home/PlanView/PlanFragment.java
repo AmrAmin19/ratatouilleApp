@@ -140,6 +140,8 @@ public class PlanFragment extends Fragment implements Iplan {
         presenter.getPlans();
     }
 
+
+
     @Override
     public void showPlans(List<Plan> plans) {
         clearAdapters();
@@ -195,9 +197,22 @@ public class PlanFragment extends Fragment implements Iplan {
         updateVisibility();
     }
 
+
+
     private boolean isSameWeek(Calendar planCalendar, Calendar currentCalendar) {
-        return planCalendar.get(Calendar.WEEK_OF_YEAR) == currentCalendar.get(Calendar.WEEK_OF_YEAR) &&
-                planCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR);
+//        return planCalendar.get(Calendar.WEEK_OF_YEAR) == currentCalendar.get(Calendar.WEEK_OF_YEAR) &&
+//                planCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR);
+
+        // Set the calendar to the start of the week
+        Calendar startOfWeek = (Calendar) currentCalendar.clone();
+        startOfWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+
+        // Calculate the end of the week
+        Calendar endOfWeek = (Calendar) startOfWeek.clone();
+        endOfWeek.add(Calendar.DAY_OF_WEEK, 6); // 6 days to get to Sunday
+
+        // Check if the planCalendar falls within the week
+        return !planCalendar.before(startOfWeek) && !planCalendar.after(endOfWeek);
     }
 
     private void clearAdapters() {
@@ -234,4 +249,7 @@ public class PlanFragment extends Fragment implements Iplan {
             emptyView.setVisibility(View.GONE);
         }
 }
+
+
+
 }
