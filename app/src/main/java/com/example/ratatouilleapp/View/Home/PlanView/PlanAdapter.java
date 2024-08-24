@@ -26,9 +26,11 @@ public class PlanAdapter extends  RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
     private final Context context;
     private final List<Plan> plans;
+    private PlanHandler planHandler;
 
-   public PlanAdapter (Context context,List<Plan> plans)
+   public PlanAdapter (Context context,List<Plan> plans,PlanHandler planHandler)
    {
+       this.planHandler=planHandler;
        this.context=context;
        this.plans=plans;
    }
@@ -59,6 +61,13 @@ public class PlanAdapter extends  RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
        Plan plan =plans.get(position);
        holder.textView.setText(plan.getMealName());
+
+       holder.button.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               planHandler.delete(plan);
+           }
+       });
 
 
 

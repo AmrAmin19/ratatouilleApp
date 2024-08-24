@@ -1,7 +1,5 @@
 package com.example.ratatouilleapp.View.Authentication;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.LoginFragmentPresenter;
-import com.example.ratatouilleapp.Presenter.SignUpFragmentPresenter;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.MainActivity;
 

@@ -15,16 +15,21 @@ import android.widget.Toast;
 
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
+import com.example.ratatouilleapp.Model.Repo.RepoCallback;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.Authentication.AuthActivity;
-import com.example.ratatouilleapp.View.MainActivity;
 
 
 public class ProfileFragment extends Fragment {
 
 Button button;
+Button buttonBackUp;
     private Irepo model;
+    private Button restoreBtn;
+
+    private Button backupPlan;
+    private Button restorePlan;
 
 
     public ProfileFragment() {
@@ -49,6 +54,11 @@ Button button;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        buttonBackUp=view.findViewById(R.id.button2);
+        restoreBtn=view.findViewById(R.id.button3);
+
+        backupPlan=view.findViewById(R.id.button5);
+        restorePlan=view.findViewById(R.id.button6);
 
         model= Respiratory.getInstance(this.getContext(),new FireBaseAuthHandler());
         button=view.findViewById(R.id.button4);
@@ -66,6 +76,81 @@ Button button;
 
                 Toast.makeText(getActivity(), "Sign out sucsess", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        buttonBackUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.backupDataToFirestore(new RepoCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                        Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            }
+        });
+
+        restoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.restoreDataFromFirestore(new RepoCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast.makeText(getContext(), "Restored", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                        Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+//
+            }
+        });
+
+        backupPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.backupPlanDataToFirestore(new RepoCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        restorePlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.restorePlanDataFromFirestore(new RepoCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Toast.makeText(getContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

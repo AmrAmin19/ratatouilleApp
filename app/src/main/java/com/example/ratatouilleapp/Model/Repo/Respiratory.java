@@ -1,10 +1,11 @@
 package com.example.ratatouilleapp.Model.Repo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
@@ -18,7 +19,13 @@ import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
-import com.example.ratatouilleapp.View.MainActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 
 import java.util.List;
 
@@ -29,6 +36,9 @@ public class Respiratory implements Irepo {
     private NetworkManger networkManger;
     private MealDAO mealDAO;
     private LiveData<List<FavMeal>> storedMeal;
+
+//    private FireBaseStoreHandler fireBaseStoreHandler;
+
 
   //  private String userEmail;
 
@@ -50,6 +60,11 @@ public class Respiratory implements Irepo {
         planDAO=db.getPlanDao();
         storedPlan=planDAO.getPlans(getUserEmail());
 
+//        this.fireBaseStoreHandler=FireBaseStoreHandler.getInstance();
+
+
+
+
 
     }
 
@@ -69,6 +84,8 @@ public class Respiratory implements Irepo {
         return  sharedPreferences.getString("userEmail", null);
 
     }
+
+
 
 
     @Override
@@ -349,16 +366,189 @@ public class Respiratory implements Irepo {
         }).start();
     }
 
-    public void deletPlan(Plan plan)
-    {
+    public void deletPlan(Plan plan) {
         plan.setUserEmail(getUserEmail());
         new Thread(new Runnable() {
             @Override
             public void run() {
-                planDAO.deletPlan(plan);
+                try {
+                    planDAO.deletPlan(plan);
+                } catch (Exception e) {
+                    // Log the exception or handle it as needed
+                    e.printStackTrace();
+                }
             }
         }).start();
     }
+
+//    public void deletPlan(Plan plan)
+//    {
+//       // plan.setUserEmail(getUserEmail());
+//       // plan.getMealId();
+//
+//        plan.setUserEmail(getUserEmail());
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//               // planDAO.deletPlan(plan.getPlanDate(), plan.getMealId(),plan.getUserEmail());
+//                planDAO.deletPlan(plan);
+//            }
+//        }).start();
+//    }
+
+
+
+  // FireStore
+
+
+    // Meals
+
+    public void backupDataToFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            // Get the list of favorite meals from Room
+            getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
+                @Override
+                public void onChanged(List<FavMeal> favMeals) {
+
+                    if (favMeals != null) {
+                        for (FavMeal favMeal : favMeals) {
+                            // Upload each meal to Firestore
+                            db.collection("users").document(userEmail)
+                                    .collection("favorites").document(favMeal.getId())
+                                    .set(favMeal)
+                                    .addOnSuccessListener(aVoid ->callback.onSuccess("Meal backed up successfully"))
+                                    .addOnFailureListener(e -> callback.onError(e));
+                        }
+                    }
+
+                }
+            });
+        }
+    }
+
+
+
+    public void restoreDataFromFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            db.collection("users").document(userEmail)
+                    .collection("favorites").get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                FavMeal favMeal = document.toObject(FavMeal.class);
+                                insert(favMeal); // Insert into Room database
+                            }
+                           callback.onSuccess("Data restored successfully");
+                        } else {
+                           callback.onError(task.getException());
+                        }
+                    });
+        }
+    }
+
+
+
+    // Plans
+
+
+    public void backupPlanDataToFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            // Get the list of favorite meals from Room
+            Observer<List<Plan>> observer = new Observer<List<Plan>>() {
+                @Override
+                public void onChanged(List<Plan> plans) {
+                    if (plans != null) {
+                        for (Plan plan : plans) {
+                            // Upload each meal to Firestore
+                            db.collection("users").document(userEmail)
+                                    .collection("Plans").document(String.valueOf(plan.getId()))
+                                    .set(plan)
+                                    .addOnSuccessListener(aVoid -> callback.onSuccess("Plan backed up successfully"))
+                                    .addOnFailureListener(e -> callback.onError(e));
+                        }
+                    }
+                    // Remove the observer after the backup is complete
+                    getStoredPlan().removeObserver(this);
+                }
+            };
+            getStoredPlan().observeForever(observer);
+        }
+    }
+
+
+
+//    public void backupPlanDataToFirestore(RepoCallback<String> callback) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if (user != null) {
+//            String userEmail = user.getEmail();
+//
+//            // Get the list of favorite meals from Room
+//            getStoredPlan().observeForever(new Observer<List<Plan>>() {
+//                @Override
+//                public void onChanged(List<Plan> plans) {
+//
+//                    if (plans != null) {
+//                        for (Plan plan : plans) {
+//                            // Upload each meal to Firestore
+//                            db.collection("users").document(userEmail)
+//                                    .collection("Plans").document(String.valueOf(plan.getId()))
+//                                    .set(plan)
+//                                    .addOnSuccessListener(aVoid ->callback.onSuccess("Plan backed up successfully"))
+//                                    .addOnFailureListener(e -> callback.onError(e));
+//                        }
+//                    }
+//
+//                }
+//            });
+//        }
+//    }
+
+    public void restorePlanDataFromFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            db.collection("users").document(userEmail)
+                    .collection("Plans").get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Plan plan = document.toObject(Plan.class);
+                                insertPlan(plan); // Insert into Room database
+                            }
+                            callback.onSuccess("Data restored successfully");
+                        } else {
+                            callback.onError(task.getException());
+                        }
+                    });
+        }
+    }
+
+
+
 
 
 

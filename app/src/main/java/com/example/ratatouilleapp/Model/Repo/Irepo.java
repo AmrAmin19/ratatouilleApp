@@ -41,4 +41,12 @@ public interface Irepo {
      String getUserEmail();
 
 
+     void backupDataToFirestore(RepoCallback<String> callback);
+     void restoreDataFromFirestore(RepoCallback<String> callback);
+
+    void restorePlanDataFromFirestore(RepoCallback<String> callback);
+
+     void backupPlanDataToFirestore(RepoCallback<String> callback);
+
+
 }

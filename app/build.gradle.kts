@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+//    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -66,6 +68,11 @@ dependencies {
     //Room
     implementation ("androidx.room:room-runtime:2.4.1")
     annotationProcessor ("androidx.room:room-compiler:2.4.1")
+    // youtube
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0")
+
+
+
 
 
 }

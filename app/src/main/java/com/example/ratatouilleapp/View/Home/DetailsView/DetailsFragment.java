@@ -1,6 +1,5 @@
 package com.example.ratatouilleapp.View.Home.DetailsView;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,9 +26,11 @@ import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.DetailsPresenter;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.Home.PlanView.WeekPickerDialog;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -40,6 +41,7 @@ public class DetailsFragment extends Fragment implements Idetails {
     private TextView mealTitle;
     private Button calBtn;
     private  Button favBtm;
+    private YouTubePlayerView mealVideo;
     private TextView instruction;
 
     Meal meal;
@@ -77,6 +79,7 @@ public class DetailsFragment extends Fragment implements Idetails {
         calBtn=view.findViewById(R.id.addToCalendarBtn);
         favBtm=view.findViewById(R.id.addToFavoritesBtn);
         instruction=view.findViewById(R.id.instructions);
+        mealVideo=view.findViewById(R.id.mealVideo);
 
 
         presenter =new DetailsPresenter(Respiratory.getInstance(this.getContext(),new FireBaseAuthHandler()),this);
@@ -87,11 +90,15 @@ public class DetailsFragment extends Fragment implements Idetails {
         ingrediantview.setAdapter(adapter);
 
 
+
+
+
         DetailsFragmentArgs detailsFragmentArgs = DetailsFragmentArgs.fromBundle(getArguments());
         detailsFragmentArgs.getMealId();
         Log.d("AmrAmin", "onViewCreated: " + detailsFragmentArgs.getMealId());
 
         presenter.getMealById(detailsFragmentArgs.getMealId());
+
 
 
         calBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +139,24 @@ public class DetailsFragment extends Fragment implements Idetails {
 
     }
 
+    public  String extractVideoId(String url) {
+        // Split the URL on '?' to get the query part
+        String[] parts = url.split("\\?");
+        if (parts.length > 1) {
+            // Split the query part on '&' to get individual parameters
+            String query = parts[1];
+            String[] queryParams = query.split("&");
+            for (String param : queryParams) {
+                // Split each parameter on '=' to separate key and value
+                String[] keyValue = param.split("=");
+                if (keyValue.length == 2 && "v".equals(keyValue[0])) {
+                    return keyValue[1]; // Return the value of the 'v' parameter
+                }
+            }
+        }
+        return null; // Return null if the video ID is not found
+    }
+
     @Override
     public void showMeal(List<Meal> meals) {
         meal= meals.get(0);
@@ -145,6 +170,20 @@ public class DetailsFragment extends Fragment implements Idetails {
                 .load(meal.getThumbnailUrl())
                 .apply(new RequestOptions().override(200, 200))
                 .into(mealImg);
+
+                if (meal.getYoutubeUrl()!= null && !meal.getYoutubeUrl().isEmpty()) {
+            getLifecycle().addObserver(mealVideo);
+            mealVideo.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    //if your url is something like this -> https://www.youtube.com/watch?v=EzyXVfyx7CU
+                    Log.d("MealVideo", "updateMeal:"+extractVideoId(meal.getYoutubeUrl()));
+                    Log.d("MealVideo", "updateMeal:"+meal.getYoutubeUrl());
+
+                    youTubePlayer.loadVideo(extractVideoId(meal.getYoutubeUrl()), 0);
+                }
+            });
+        }
     }
 
     @Override
