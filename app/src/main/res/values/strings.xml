@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ratatouilleApp</string>
+    <string name="app_name">Ratatouille</string>
     <string name="emailText">Email</string>
     <string name="passwordText">Password</string>
     <string name="ConfirmPasswordText">Confirm Password</string>

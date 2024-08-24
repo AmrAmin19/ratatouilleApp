@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.R;
+import com.example.ratatouilleapp.View.Home.HomeView.HomeFragmentDirections;
 import com.example.ratatouilleapp.View.Home.MealAdapter;
 
 import java.util.List;
@@ -70,6 +72,17 @@ public class PlanAdapter extends  RecyclerView.Adapter<PlanAdapter.ViewHolder>{
        });
 
 
+       holder.cardView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+               PlanFragmentDirections.ActionPlanFragmentToDetailsFragment action =
+                       PlanFragmentDirections.actionPlanFragmentToDetailsFragment(plan.getMealId());
+
+               Navigation.findNavController(v).navigate(action);
+               
+           }
+       });
 
         Glide.with(context)
                 .load(plan.getMealImage())

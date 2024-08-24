@@ -75,13 +75,7 @@
                     android:backgroundTint="@color/primaryColor"
                     android:text="Add to Calendar" />
 
-                <Button
-                    android:id="@+id/addToFavoritesBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/primaryColor"
-                    android:text="Add to Favorites"
-                    android:layout_marginStart="16dp" />
+
             </LinearLayout>
 
             <!-- Ingredients Title -->

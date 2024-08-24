@@ -40,7 +40,6 @@ public class DetailsFragment extends Fragment implements Idetails {
     private ImageView mealImg;
     private TextView mealTitle;
     private Button calBtn;
-    private  Button favBtm;
     private YouTubePlayerView mealVideo;
     private TextView instruction;
 
@@ -77,7 +76,6 @@ public class DetailsFragment extends Fragment implements Idetails {
         mealImg=view.findViewById(R.id.mealImage);
         mealTitle=view.findViewById(R.id.mealTitle);
         calBtn=view.findViewById(R.id.addToCalendarBtn);
-        favBtm=view.findViewById(R.id.addToFavoritesBtn);
         instruction=view.findViewById(R.id.instructions);
         mealVideo=view.findViewById(R.id.mealVideo);
 
