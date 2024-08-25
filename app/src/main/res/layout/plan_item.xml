@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mealLayout"
+    android:id="@+id/planLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mealCardView"
+        android:id="@+id/planCardView"
         android:layout_margin="8dp"
         android:elevation="4dp"
         app:cardCornerRadius="10dp"
@@ -23,7 +23,7 @@
 
             <!-- Title on top of the image -->
             <ImageView
-                android:id="@+id/mealImageView"
+                android:id="@+id/planImageView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@drawable/rounded_image"
@@ -31,7 +31,7 @@
                 android:src="@drawable/google" />
 
             <TextView
-                android:id="@+id/mealTitleTextView"
+                android:id="@+id/planTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -45,15 +45,15 @@
 
             <!-- Favorite button in the top-right corner -->
             <ImageButton
-                android:id="@+id/favButton"
+                android:id="@+id/planButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="@string/favorite"
-                android:src="@drawable/selector_btn" />
+                android:contentDescription="@string/cancel"
+                android:src="@drawable/baseline_cancel_24" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

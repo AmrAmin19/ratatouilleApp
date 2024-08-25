@@ -34,7 +34,7 @@
 
                     android:fontFamily="@font/abhaya_libre_extrabold"
                     android:gravity="center"
-                    android:text="Ratatouille"
+                    android:text="@string/app_name"
                     android:textColor="@color/primaryColor"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -54,7 +54,7 @@
                 android:id="@+id/mealTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Meal Title"
+                android:text="@string/meal_title"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:paddingTop="8dp"
@@ -73,15 +73,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/primaryColor"
-                    android:text="Add to Calendar" />
+                    android:text="@string/add_to_calendar" />
 
-                <Button
-                    android:id="@+id/addToFavoritesBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/primaryColor"
-                    android:text="Add to Favorites"
-                    android:layout_marginStart="16dp" />
+
             </LinearLayout>
 
             <!-- Ingredients Title -->
@@ -89,7 +83,7 @@
                 android:id="@+id/ingredientTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ingredients"
+                android:text="@string/ingredients"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
@@ -108,7 +102,7 @@
                 android:id="@+id/instructionTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Instructions"
+                android:text="@string/instructions"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
@@ -119,7 +113,7 @@
                 android:id="@+id/instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Step-by-step instructions go here."
+                android:text="@string/step_by_step_instructions_go_here"
                 android:paddingTop="8dp"
                 android:layout_marginBottom="16dp"/>
 
@@ -128,14 +122,14 @@
                 android:id="@+id/videoTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Video"
+                android:text="@string/video"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
                 android:layout_marginBottom="8dp"/>
 
             <!-- Video (Replace this with a YouTube player or WebView) -->
-            <VideoView
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                 android:id="@+id/mealVideo"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"

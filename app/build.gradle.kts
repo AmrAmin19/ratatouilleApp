@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+//    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -64,8 +66,35 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
     //Room
-    implementation ("androidx.room:room-runtime:2.4.1")
-    annotationProcessor ("androidx.room:room-compiler:2.4.1")
+    implementation ("androidx.room:room-runtime:2.5.2")
+    annotationProcessor ("androidx.room:room-compiler:2.5.2")
+    // youtube
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0")
+
+
+
+    //Rx
+    implementation ("io.reactivex.rxjava3:rxjava:3.1.6")
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.1")
+
+
+    //Rx  Retrofit
+
+    implementation ("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
+
+    //Rx Room
+
+    implementation ("androidx.room:room-rxjava3:2.5.2")
+
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("androidx.credentials:credentials:1.2.2")
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+//    implementation ("androidx.room:room-rxjava3:2.5.2")
+
+
+
 
 
 }

@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity(tableName = "meal_plans")
 public class Plan {
 
@@ -22,15 +20,18 @@ public class Plan {
 
     private  String planDate;
 
+    private String userEmail;
+
 
     public Plan(){}
 
 
-    public Plan(String mealId, String mealName, String mealImage, String planDate) {
+    public Plan(String mealId, String mealName, String mealImage, String planDate,String userEmail) {
         this.mealId = mealId;
         this.mealName = mealName;
         this.mealImage = mealImage;
         this.planDate = planDate;
+        this.userEmail=userEmail;
     }
 
     public String getPlanDate() {
@@ -71,5 +72,13 @@ public class Plan {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

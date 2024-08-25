@@ -2,23 +2,41 @@ package com.example.ratatouilleapp.Model.Repo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.ratatouilleapp.Model.Api.Area;
 import com.example.ratatouilleapp.Model.Api.Category;
 import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
-import com.example.ratatouilleapp.Model.Api.NetworkCallback;
 import com.example.ratatouilleapp.Model.Api.NetworkManger;
 import com.example.ratatouilleapp.Model.DB.AppDatabase;
 import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
+
 import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class Respiratory implements Irepo {
     private Context context;
@@ -26,27 +44,35 @@ public class Respiratory implements Irepo {
     private IfireBaseAuth ifireBaseAuth;
     private NetworkManger networkManger;
     private MealDAO mealDAO;
-    private LiveData<List<FavMeal>> storedMeal;
+    private Flowable<List<FavMeal>> storedMeal;
 
-    private String userEmail;
+//    private FireBaseStoreHandler fireBaseStoreHandler;
+
+
+  //  private String userEmail;
 
     private PlanDAO planDAO;
-    private LiveData<List<Plan>> storedPlan;
+    private Flowable<List<Plan>> storedPlan;
+
+
 
     private Respiratory(Context context , IfireBaseAuth ifireBaseAuth)
     {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        this.userEmail=sharedPreferences.getString("userEmail", null);
 
         this.context=context;
         this.ifireBaseAuth=ifireBaseAuth;
         this.networkManger = NetworkManger.getInstance();
         AppDatabase db= AppDatabase.getInstance(context.getApplicationContext());
         mealDAO = db.getMealDao();
-        storedMeal=mealDAO.getFavMeals(userEmail);
+        storedMeal=mealDAO.getFavMeals(getUserEmail());
 
         planDAO=db.getPlanDao();
-        storedPlan=planDAO.getPlans();
+        storedPlan=planDAO.getPlans(getUserEmail());
+
+//        this.fireBaseStoreHandler=FireBaseStoreHandler.getInstance();
+
+
+
 
 
     }
@@ -62,8 +88,13 @@ public class Respiratory implements Irepo {
 
     public String getUserEmail() {
 
-        return userEmail;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        return  sharedPreferences.getString("userEmail", null);
+
     }
+
+
 
 
     @Override
@@ -74,11 +105,15 @@ public class Respiratory implements Irepo {
             public void onSuccess() {
                 callback.onSuccess();
 
-                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isSignedIn", true);
                 editor.putString("userEmail",email);
                 editor.apply();
+
+                storedMeal = mealDAO.getFavMeals(email);
+                storedPlan = planDAO.getPlans(email);
             }
 
             @Override
@@ -87,12 +122,7 @@ public class Respiratory implements Irepo {
             }
         });
 
-       // ifireBaseAuth.signIn(email,password,callback);
 
-//        SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("isSignedIn", true);
-//        editor.apply();
 
 
     }
@@ -105,10 +135,6 @@ public class Respiratory implements Irepo {
             public void onSuccess() {
                 callback.onSuccess();
 
-//                SharedPreferences sharedPreferences = ((context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putBoolean("isSignedIn", true);
-//                editor.apply();
 
             }
 
@@ -128,11 +154,15 @@ public class Respiratory implements Irepo {
 
         ifireBaseAuth.signOut();
 
-        SharedPreferences sharedPreferences = (context).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isSignedIn", false);
-        editor.putString("userEmail",null);
+        editor.remove("userEmail");// This removes the userEmail entry
+        editor.clear(); // This clears all data in the preferences
         editor.apply();
+
+
 
     }
 
@@ -140,220 +170,291 @@ public class Respiratory implements Irepo {
 
     // Network Manger
     @Override
-    public void searchMealByName(String mealName, final RepoCallback<List<Meal>> callback) {
-        networkManger.searchMealByName(mealName, new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
+    public Single<List<Meal>> searchMealByName(String mealName) {
+        return networkManger.searchMealByName(mealName);
     }
 
     @Override
-    public void getMealsByFirstLetter(String letter, final RepoCallback<List<Meal>> callback) {
-        networkManger.getMealsByFirstLetter(letter, new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
+    public Single<List<Meal>> getMealsByFirstLetter(String letter) {
+        return networkManger.getMealsByFirstLetter(letter);
     }
 
     @Override
-    public void getMealById(String mealId, final RepoCallback<List<Meal>> callback) {
-        networkManger.getMealById(mealId, new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
+    public Single<List<Meal>> getMealById(String mealId) {
+      return   networkManger.getMealById(mealId);
 
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
     }
 
     @Override
-    public void getRandomMeal(final RepoCallback<List<Meal>> callback) {
-        networkManger.getRandomMeal(new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
+    public Single<List<Meal>> getRandomMeal() {
+        return networkManger.getRandomMeal();
 
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
     }
 
     @Override
-    public void getMealCategories(final RepoCallback<List<Category>> callback) {
-        networkManger.getMealCategories(new NetworkCallback<List<Category>>() {
-            @Override
-            public void onResponseUpdate(List<Category> categories) {
-                callback.onSuccess(categories);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
+    public Single<List<Category>> getMealCategories() {
+       return networkManger.getMealCategories();
     }
 
     @Override
-    public void filterMealsByIngredient(String ingredient, final RepoCallback<List<Meal>> callback) {
-        networkManger.filterMealsByIngredient(ingredient, new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
+    public Single<List<Meal>> filterMealsByIngredient(String ingredient) {
+       return networkManger.filterMealsByIngredient(ingredient);
     }
 
     @Override
-    public void filterMealsByCategory(String category, final RepoCallback<List<Meal>> callback) {
-        networkManger.filterMealsByCategory(category, new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
+    public Single<List<Meal>> filterMealsByCategory(String category) {
+        return networkManger.filterMealsByCategory(category);
     }
 
     @Override
-    public void filterMealsByArea(String area, final RepoCallback<List<Meal>> callback) {
-        networkManger.filterMealsByArea(area, new NetworkCallback<List<Meal>>() {
-            @Override
-            public void onResponseUpdate(List<Meal> meals) {
-                callback.onSuccess(meals);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-            }
-        });
+    public Single<List<Meal>> filterMealsByArea(String area) {
+        return networkManger.filterMealsByArea(area);
     }
 
     @Override
-    public void getIngrediants(final RepoCallback<List<Ingredient>> callback)
+    public Single<List<Ingredient>> getIngrediants()
     {
-        networkManger.getAllIngredients(new NetworkCallback<List<Ingredient>>() {
-            @Override
-            public void onResponseUpdate(List<Ingredient> data) {
-                callback.onSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-
-            }
-        });
+        return networkManger.getAllIngredients();
     }
 
 
     @Override
-    public void getAreas(final RepoCallback<List<Area>> callback)
+    public Single<List<Area>> getAreas()
     {
-        networkManger.getAllAreas(new NetworkCallback<List<Area>>() {
-            @Override
-            public void onResponseUpdate(List<Area> data) {
-                callback.onSuccess(data);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                callback.onError(throwable);
-
-            }
-        });
+        return networkManger.getAllAreas();
     }
 
 
 
     // Database Meal
-    public LiveData<List<FavMeal>> getStoredFavMeals()
+    public Flowable<List<FavMeal>> getStoredFavMeals()
     {
+
         return  storedMeal;
     }
 
     public  void  delet(FavMeal meal)
     {
-        //meal.setUserEmail(getUserEmail());
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mealDAO.deleteMealById(meal.getId(),getUserEmail());
-            }
-        }).start();
+        mealDAO.deleteMealById(meal.getId(),getUserEmail())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    Log.d("TestDatabase", "Delete: ");
+                }, throwable -> {
+                    Log.d("TestDatabase", "Delete: "+"failuer");
+                });
     }
 
 
     public void insert(FavMeal meal)
     {
         meal.setUserEmail(getUserEmail());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mealDAO.insertMeal(meal);
-            }
-        }).start();
+        mealDAO.insertMeal(meal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    Log.d("TestDatabase", "insert: ");
+                }, throwable -> {
+                    Log.d("TestDatabase", "insert: "+"failuer");
+                });
     }
 
 
     //Database Plan
 
-    public LiveData<List<Plan>> getStoredPlan()
+    public Flowable<List<Plan>> getStoredPlan()
     {
+
         return storedPlan;
     }
 
      public   void insertPlan(Plan plan)
     {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                planDAO.insertPlan(plan);
-            }
-        }).start();
+       plan.setUserEmail(getUserEmail());
+       planDAO.insertPlan(plan)
+               .subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(() -> {
+                   Log.d("TestDatabase", "insert: Plan ");
+               }, throwable -> {
+                   Log.d("TestDatabase", "insert: Plan "+"failuer");
+               });
+
     }
 
-    public void deletPlan(Plan plan)
+    public void deletPlan(Plan plan) {
+        plan.setUserEmail(getUserEmail());
+        planDAO.deletPlan(plan)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    Log.d("TestDatabase", "Delete plan ");
+                }, throwable -> {
+                    Log.d("TestDatabase", "Delete : Plan "+"failuer");
+                });
+
+    }
+
+  // FireStore
+
+
+    // Meals
+
+    public void backupDataToFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            // Get the list of favorite meals from Room
+            getStoredFavMeals()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            favMeals -> {
+                                if (favMeals != null) {
+                                    for (FavMeal favMeal : favMeals) {
+                                        // Upload each meal to Firestore
+                                        db.collection("users").document(userEmail)
+                                                .collection("favorites").document(favMeal.getId())
+                                                .set(favMeal)
+                                                .addOnSuccessListener(aVoid -> Log.d("backupAmr", "backupDataToFirestore: meal "))
+                                                .addOnFailureListener(e -> Log.d("backupAmr", "backupDataToFirestore: meal "+"faliur"));
+//                                                .addOnSuccessListener(aVoid ->callback.onSuccess("Meal backed up successfully"))
+//                                                .addOnFailureListener(e -> callback.onError(e));
+                                    }
+                                }
+                            }
+                            // Add showError to the view interface if not already present
+                    );
+//
+        }
+    }
+
+
+
+    public void restoreDataFromFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            db.collection("users").document(userEmail)
+                    .collection("favorites").get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                FavMeal favMeal = document.toObject(FavMeal.class);
+                                insert(favMeal); // Insert into Room database
+                            }
+                            Log.d("backupAmr", "restoreDataFromFirestore: meal ");
+                           //callback.onSuccess("Data restored successfully");
+                        } else {
+                            Log.d("backupAmr", "restoreDataFromFirestore: meal " +"faliur");
+                           //callback.onError(task.getException());
+                        }
+                    });
+        }
+    }
+
+
+
+    // Plans
+
+
+    public void backupPlanDataToFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            getStoredPlan()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            plans -> {
+                                if (plans != null) {
+                        for (Plan plan : plans) {
+                            // Upload each meal to Firestore
+                            db.collection("users").document(userEmail)
+                                    .collection("Plans").document(String.valueOf(plan.getId()))
+                                    .set(plan)
+                                    .addOnSuccessListener(aVoid -> Log.d("backupAmr", "backupPlanDataToFirestore: plan "))
+                                    .addOnFailureListener(e -> Log.d("backupAmr", "backupPlanDataToFirestore: plan "+"faliur"));
+//                                    .addOnSuccessListener(aVoid -> callback.onSuccess("Plan backed up successfully"))
+//                                    .addOnFailureListener(e -> callback.onError(e));
+                        }
+                    }
+
+                            }
+                    );
+
+        }
+    }
+
+
+
+
+
+    public void restorePlanDataFromFirestore(RepoCallback<String> callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        if (user != null) {
+            String userEmail = user.getEmail();
+
+            db.collection("users").document(userEmail)
+                    .collection("Plans").get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Plan plan = document.toObject(Plan.class);
+                                insertPlan(plan); // Insert into Room database
+                            }
+                            Log.d("backupAmr", "restorePlanDataFromFirestore: plan ");
+                           // callback.onSuccess("Data restored successfully");
+                        } else {
+                           // callback.onError(task.getException());
+                            Log.d("backupAmr", "restorePlanDataFromFirestore: plan "+"failuer");
+                        }
+                    });
+        }
+    }
+
+    public void signInUsingGmailAccount(String idToken,RepoCallback<String> callback)
     {
-        new Thread(new Runnable() {
+        ifireBaseAuth.signInUsingGmailAccount(idToken, new IfireBaseAuth.AuthCallback() {
             @Override
-            public void run() {
-                planDAO.deletPlan(plan);
+            public void onSuccess() {
+
+                callback.onSuccess("Sucsses");
+
+                String email=ifireBaseAuth.getCurrentUser();
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isSignedIn", true);
+                editor.putString("userEmail",email);
+                editor.apply();
+
+                storedMeal = mealDAO.getFavMeals(email);
+                storedPlan = planDAO.getPlans(email);
+
+
             }
-        }).start();
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onError(e);
+            }
+        });
     }
-
-
 
 }

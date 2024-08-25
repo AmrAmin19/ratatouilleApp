@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
@@ -69,6 +70,9 @@ public class SignUpFragment extends Fragment implements IsignUp {
                 email.setText("");
                 password.setText("");
                 confirmPas.setText("");
+
+                NavHostFragment.findNavController(SignUpFragment.this)
+                        .navigate(R.id.action_signUpFragment_to_logInFragment);
             }
             else
             {

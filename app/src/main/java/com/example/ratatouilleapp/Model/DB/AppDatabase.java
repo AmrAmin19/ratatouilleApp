@@ -14,7 +14,7 @@ import com.example.ratatouilleapp.Model.DB.FavMeal.MealDAO;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 
-@Database(entities = {FavMeal.class, Plan.class}, version =4)
+@Database(entities = {FavMeal.class, Plan.class}, version =5)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance=null;
     public abstract MealDAO getMealDao();
@@ -50,10 +50,17 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE meal_plans ADD COLUMN userEmail TEXT");
+        }
+    };
+
     public static synchronized AppDatabase getInstance(Context context){
         if (instance == null){
             instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "MealDb")
-                    .addMigrations(MIGRATION_2_3,MIGRATION_3_4)
+                    .addMigrations(MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5)
                     .build();
         }
         return instance;

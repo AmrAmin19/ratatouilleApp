@@ -1,7 +1,5 @@
 package com.example.ratatouilleapp.View.Authentication;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import com.example.ratatouilleapp.Model.Firebase.FireBaseAuthHandler;
 import com.example.ratatouilleapp.Model.Repo.Respiratory;
 import com.example.ratatouilleapp.Presenter.LoginFragmentPresenter;
-import com.example.ratatouilleapp.Presenter.SignUpFragmentPresenter;
 import com.example.ratatouilleapp.R;
 import com.example.ratatouilleapp.View.MainActivity;
 
@@ -31,6 +28,8 @@ public class LogInFragment extends Fragment implements Ilogin {
     private ProgressBar progressBar;
 
     LoginFragmentPresenter presenter;
+
+
 
 
     public LogInFragment() {
@@ -63,7 +62,7 @@ public class LogInFragment extends Fragment implements Ilogin {
         progressBar = view.findViewById(R.id.progressBar);
 
         login.setOnClickListener(v -> {
-            String emailS = email.getText().toString();
+           String  emailS = email.getText().toString();
             String passwordS = password.getText().toString();
             presenter.signIn(emailS, passwordS);
             email.setText("");
@@ -90,13 +89,9 @@ public class LogInFragment extends Fragment implements Ilogin {
     @Override
     public void onSignInSuccess() {
 
-        //Shared pref : note try to make in repo
-//        SharedPreferences sharedPreferences = ((this.getContext()).getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE));
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("isSignedIn", true);
-//        editor.apply();
 
-        Intent intent = new Intent(this.getContext(), MainActivity.class);
+
+        Intent intent = new Intent(this.getActivity(), MainActivity.class);
         startActivity(intent);
         this.getActivity().finish();
 

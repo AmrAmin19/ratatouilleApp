@@ -8,37 +8,54 @@ import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
-import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 
 public interface Irepo {
     void signIn(String email, String password, RepoAuthCallback callback);
     void signUp(String email, String password, RepoAuthCallback callback);
     void signOut();
 
-     void searchMealByName(String mealName, final RepoCallback<List<Meal>> callback);
-     void getMealsByFirstLetter(String letter, final RepoCallback<List<Meal>> callback);
-     void getMealById(String mealId, final RepoCallback<List<Meal>> callback);
-     void getRandomMeal(final RepoCallback<List<Meal>> callback);
-     void getMealCategories(final RepoCallback<List<Category>> callback);
-     void filterMealsByIngredient(String ingredient, final RepoCallback<List<Meal>> callback);
-     void filterMealsByCategory(String category, final RepoCallback<List<Meal>> callback);
-     void filterMealsByArea(String area, final RepoCallback<List<Meal>> callback);
 
-     void getIngrediants(final RepoCallback<List<Ingredient>> callback);
-     void getAreas(final RepoCallback<List<Area>> callback);
+   // public void  linkWithGoogle(GoogleSignInAccount googleSignInAccount, RepoAuthCallback callback);
+//   public void signInUsingGmailAccount(String idToken,RepoCallback<String> callback);
+   public void signInUsingGmailAccount(String idToken,RepoCallback<String> callback);
+
+
+    Single<List<Meal>> searchMealByName(String mealName);
+     Single<List<Meal>> getMealsByFirstLetter(String letter);
+     Single<List<Meal>> getMealById(String mealId);
+     Single<List<Meal>> getRandomMeal();
+     Single<List<Category>> getMealCategories();
+     Single<List<Meal>> filterMealsByIngredient(String ingredient);
+     Single<List<Meal>> filterMealsByCategory(String category);
+     Single<List<Meal>> filterMealsByArea(String area);
+     Single<List<Ingredient>> getIngrediants();
+     Single<List<Area>> getAreas();
+
 
       void  delet(FavMeal meal);
      void insert(FavMeal meal);
-     LiveData<List<FavMeal>> getStoredFavMeals();
+      Flowable<List<FavMeal>> getStoredFavMeals();
 
 
-     LiveData<List<Plan>> getStoredPlan();
+     Flowable<List<Plan>> getStoredPlan();
      void insertPlan(Plan plan);
    void deletPlan(Plan plan);
 
      String getUserEmail();
+
+
+     void backupDataToFirestore(RepoCallback<String> callback);
+     void restoreDataFromFirestore(RepoCallback<String> callback);
+
+    void restorePlanDataFromFirestore(RepoCallback<String> callback);
+
+     void backupPlanDataToFirestore(RepoCallback<String> callback);
 
 
 }
