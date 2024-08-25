@@ -20,9 +20,13 @@ import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.PlanDAO;
 import com.example.ratatouilleapp.Model.Firebase.IfireBaseAuth;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -291,23 +295,6 @@ public class Respiratory implements Irepo {
 
     }
 
-//    public void deletPlan(Plan plan)
-//    {
-//       // plan.setUserEmail(getUserEmail());
-//       // plan.getMealId();
-//
-//        plan.setUserEmail(getUserEmail());
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//               // planDAO.deletPlan(plan.getPlanDate(), plan.getMealId(),plan.getUserEmail());
-//                planDAO.deletPlan(plan);
-//            }
-//        }).start();
-//    }
-
-
-
   // FireStore
 
 
@@ -341,23 +328,7 @@ public class Respiratory implements Irepo {
                             }
                             // Add showError to the view interface if not already present
                     );
-//            getStoredFavMeals().observeForever(new Observer<List<FavMeal>>() {
-//                @Override
-//                public void onChanged(List<FavMeal> favMeals) {
 //
-//                    if (favMeals != null) {
-//                        for (FavMeal favMeal : favMeals) {
-//                            // Upload each meal to Firestore
-//                            db.collection("users").document(userEmail)
-//                                    .collection("favorites").document(favMeal.getId())
-//                                    .set(favMeal)
-//                                    .addOnSuccessListener(aVoid ->callback.onSuccess("Meal backed up successfully"))
-//                                    .addOnFailureListener(e -> callback.onError(e));
-//                        }
-//                    }
-//
-//                }
-//            });
         }
     }
 
@@ -423,57 +394,12 @@ public class Respiratory implements Irepo {
                             }
                     );
 
-            // Get the list of favorite meals from Room
-//            Observer<List<Plan>> observer = new Observer<List<Plan>>() {
-//                @Override
-//                public void onChanged(List<Plan> plans) {
-////                    if (plans != null) {
-////                        for (Plan plan : plans) {
-////                            // Upload each meal to Firestore
-////                            db.collection("users").document(userEmail)
-////                                    .collection("Plans").document(String.valueOf(plan.getId()))
-////                                    .set(plan)
-////                                    .addOnSuccessListener(aVoid -> callback.onSuccess("Plan backed up successfully"))
-////                                    .addOnFailureListener(e -> callback.onError(e));
-////                        }
-////                    }
-//                    // Remove the observer after the backup is complete
-//                  //  getStoredPlan().removeObserver(this);
-//                }
-//            };
-//           // getStoredPlan().observeForever(observer);
         }
     }
 
 
 
-//    public void backupPlanDataToFirestore(RepoCallback<String> callback) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        if (user != null) {
-//            String userEmail = user.getEmail();
-//
-//            // Get the list of favorite meals from Room
-//            getStoredPlan().observeForever(new Observer<List<Plan>>() {
-//                @Override
-//                public void onChanged(List<Plan> plans) {
-//
-//                    if (plans != null) {
-//                        for (Plan plan : plans) {
-//                            // Upload each meal to Firestore
-//                            db.collection("users").document(userEmail)
-//                                    .collection("Plans").document(String.valueOf(plan.getId()))
-//                                    .set(plan)
-//                                    .addOnSuccessListener(aVoid ->callback.onSuccess("Plan backed up successfully"))
-//                                    .addOnFailureListener(e -> callback.onError(e));
-//                        }
-//                    }
-//
-//                }
-//            });
-//        }
-//    }
+
 
     public void restorePlanDataFromFirestore(RepoCallback<String> callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -502,9 +428,33 @@ public class Respiratory implements Irepo {
         }
     }
 
+    public void signInUsingGmailAccount(String idToken,RepoCallback<String> callback)
+    {
+        ifireBaseAuth.signInUsingGmailAccount(idToken, new IfireBaseAuth.AuthCallback() {
+            @Override
+            public void onSuccess() {
+
+                callback.onSuccess("Sucsses");
+
+                String email=ifireBaseAuth.getCurrentUser();
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isSignedIn", true);
+                editor.putString("userEmail",email);
+                editor.apply();
+
+                storedMeal = mealDAO.getFavMeals(email);
+                storedPlan = planDAO.getPlans(email);
 
 
+            }
 
-
+            @Override
+            public void onFailure(Exception e) {
+                callback.onError(e);
+            }
+        });
+    }
 
 }

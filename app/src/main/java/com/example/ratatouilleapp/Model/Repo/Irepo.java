@@ -8,6 +8,7 @@ import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.Api.Meal;
 import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.DB.PlanMeal.Plan;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.List;
 
@@ -20,7 +21,12 @@ public interface Irepo {
     void signOut();
 
 
-     Single<List<Meal>> searchMealByName(String mealName);
+   // public void  linkWithGoogle(GoogleSignInAccount googleSignInAccount, RepoAuthCallback callback);
+//   public void signInUsingGmailAccount(String idToken,RepoCallback<String> callback);
+   public void signInUsingGmailAccount(String idToken,RepoCallback<String> callback);
+
+
+    Single<List<Meal>> searchMealByName(String mealName);
      Single<List<Meal>> getMealsByFirstLetter(String letter);
      Single<List<Meal>> getMealById(String mealId);
      Single<List<Meal>> getRandomMeal();
