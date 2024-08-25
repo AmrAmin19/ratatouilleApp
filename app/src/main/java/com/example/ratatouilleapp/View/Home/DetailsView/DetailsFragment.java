@@ -54,6 +54,8 @@ public class DetailsFragment extends Fragment implements Idetails {
 
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

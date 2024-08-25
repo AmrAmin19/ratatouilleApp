@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.ratatouilleapp.View.Home.ProfileFragment"
+        android:name="com.example.ratatouilleapp.View.Home.ProfileView.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
