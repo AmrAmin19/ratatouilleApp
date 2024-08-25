@@ -92,6 +92,7 @@ public class SearchFragment extends Fragment implements Isearch , FavHandler {
 
         presenter=new SearchPresenter( Respiratory.getInstance(this.getContext(),new FireBaseAuthHandler()),this);
         presenter.getFavList();
+        presenter.getIngrediantList();
 
 
 
@@ -152,7 +153,7 @@ public class SearchFragment extends Fragment implements Isearch , FavHandler {
                         searchMealAdabter.updateMeals(new ArrayList<>());
 
                         String selectedType = chip.getText().toString().toLowerCase();
-                        Log.d("Amr Chip", chip.getText().toString().toLowerCase());
+                        Log.d("AmrChip", chip.getText().toString().toLowerCase());
 
                         setupSearchView(searchEditText, searchSubject,selectedType);
 //                        setupSearchView(searchEditText, searchSubject);

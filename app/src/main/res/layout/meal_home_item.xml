@@ -38,7 +38,7 @@
                 android:background="#80000000"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="Healthy Taco Salad with fresh vegetable"
+                android:text="@string/healthy_taco_salad_with_fresh_vegetable"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -52,7 +52,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="Favorite"
+                android:contentDescription="@string/favorite"
                 android:src="@drawable/selector_btn" />
 
         </RelativeLayout>

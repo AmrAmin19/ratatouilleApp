@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Previous Week"
+                android:contentDescription="@string/previous_week"
                 android:src="@drawable/baseline_arrow_back_ios_24" />
 
             <TextView
@@ -34,7 +34,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"
-                android:text="Aug 19 - Aug 25" />
+                android:text="@string/aug_19_aug_25" />
 
             <ImageButton
                 android:id="@+id/btnNextWeek"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_arrow_forward_ios_24"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Next Week" />
+                android:contentDescription="@string/next_week" />
         </LinearLayout>
 
         <ScrollView
@@ -62,7 +62,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Monday"
+                    android:text="@string/monday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
@@ -96,7 +96,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Tuseday"
+                    android:text="@string/tuseday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
@@ -130,7 +130,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Wednesday"
+                    android:text="@string/wednesday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
@@ -164,7 +164,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Thursday"
+                    android:text="@string/thursday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -175,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
@@ -198,7 +198,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Friday"
+                    android:text="@string/friday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
@@ -232,7 +232,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Saturday"
+                    android:text="@string/saturday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -243,7 +243,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"
@@ -266,7 +266,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/abhaya_libre_extrabold"
-                    android:text="Sunday"
+                    android:text="@string/sunday"
                     android:textColor="@color/myBlack"
                     android:textSize="24dp"
                     android:textStyle="bold" />
@@ -277,7 +277,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="No meals added."
+                    android:text="@string/no_meals_added"
                     android:visibility="gone"
                     android:gravity="center"
                     android:textColor="@android:color/darker_gray"

@@ -2,6 +2,7 @@ package com.example.ratatouilleapp.Presenter;
 
 import androidx.lifecycle.Observer;
 
+import com.example.ratatouilleapp.Model.Api.Ingredient;
 import com.example.ratatouilleapp.Model.DB.FavMeal.FavMeal;
 import com.example.ratatouilleapp.Model.Repo.Irepo;
 import com.example.ratatouilleapp.View.Home.SearchView.Isearch;
@@ -18,6 +19,7 @@ public class SearchPresenter {
 
     private List<String> categoryList=new ArrayList<>();
     private List<String> areaList=new ArrayList<>();
+    private List<String> ingredientsLocal=new ArrayList<>();
 
    public SearchPresenter(Irepo repo,Isearch view)
    {
@@ -73,6 +75,8 @@ public class SearchPresenter {
        areaList.add("Ukrainian");
        areaList.add("Unknown");
        areaList.add("Vietnamese");
+
+
 
    }
 
@@ -147,6 +151,14 @@ public class SearchPresenter {
 //                  }
 //              });
                 break;
+            case "ingredients":
+                repo.filterMealsByIngredient(getMatchIngrediant(query))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showMeals(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        );
         }
     }
 
@@ -158,6 +170,21 @@ public class SearchPresenter {
                 .subscribe(
                         favMeals -> {
                             view.ShowMealFavorite(favMeals);
+                        }
+                );
+    }
+
+    public void getIngrediantList()
+    {
+        repo.getIngrediants()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        ingredients -> {
+                           for (Ingredient ingredient:ingredients)
+                           {
+                               ingredientsLocal.add(ingredient.getName());
+                           }
                         }
                 );
     }
@@ -188,6 +215,25 @@ public class SearchPresenter {
 
         // Iterate through the category list
         for (String s : areaList) {
+            String lowerS = s.toLowerCase();
+
+            // Check if the element equals or contains the input string
+            if (lowerS.equals(lowerCat) || lowerS.contains(lowerCat)) {
+                query = s;
+                break; // Exit loop on the first match
+            }
+        }
+
+        return query.isEmpty() ? null : query;
+    }
+
+    public String getMatchIngrediant(String cat) {
+        // Convert the input string to lowercase
+        String query = "";
+        String lowerCat = cat.toLowerCase();
+
+        // Iterate through the category list
+        for (String s : ingredientsLocal) {
             String lowerS = s.toLowerCase();
 
             // Check if the element equals or contains the input string
